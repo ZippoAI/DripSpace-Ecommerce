@@ -1,0 +1,432 @@
+<div class="dripspaceFooter-footer">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .dripspaceFooter-footer {
+      font-family: 'Cormorant Garamond', 'Didot', 'Playfair Display', serif;
+      background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%);
+      color: #fdfbf7;
+      border-top: 1px solid rgba(189, 157, 107, 0.2);
+    }
+
+    .dripspaceFooter-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 40px 0;
+    }
+
+    .dripspaceFooter-main {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+      gap: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(189, 157, 107, 0.15);
+    }
+
+    .dripspaceFooter-brand {
+      max-width: 320px;
+    }
+
+    .dripspaceFooter-logo {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: #fdfbf7;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .dripspaceFooter-logo::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #bd9d6b, #d4af77);
+    }
+
+    .dripspaceFooter-description {
+      color: #d4d4d4;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    .dripspaceFooter-social {
+      display: flex;
+      gap: 18px;
+      margin-top: 25px;
+    }
+
+    .dripspaceFooter-social-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(189, 157, 107, 0.1);
+      border: 1px solid rgba(189, 157, 107, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #d4af77;
+    }
+
+    .dripspaceFooter-social-btn:hover {
+      background: linear-gradient(135deg, #bd9d6b, #d4af77);
+      border-color: #d4af77;
+      color: #2c2c2c;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(189, 157, 107, 0.3);
+    }
+
+    .dripspaceFooter-column h3 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      color: #fdfbf7;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .dripspaceFooter-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, #bd9d6b, #d4af77);
+    }
+
+    .dripspaceFooter-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .dripspaceFooter-links a {
+      color: #d4d4d4;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      display: inline-block;
+      position: relative;
+    }
+
+    .dripspaceFooter-links a::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #d4af77;
+      transition: width 0.3s ease;
+    }
+
+    .dripspaceFooter-links a:hover {
+      color: #d4af77;
+      transform: translateX(5px);
+    }
+
+    .dripspaceFooter-links a:hover::before {
+      width: 100%;
+    }
+
+    .dripspaceFooter-newsletter {
+      max-width: 100%;
+    }
+
+    .dripspaceFooter-newsletter p {
+      color: #d4d4d4;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .dripspaceFooter-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dripspaceFooter-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(189, 157, 107, 0.2);
+      padding: 14px 18px;
+      color: #fdfbf7;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .dripspaceFooter-input::placeholder {
+      color: #999;
+    }
+
+    .dripspaceFooter-input:focus {
+      border-color: #d4af77;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .dripspaceFooter-subscribe-btn {
+      background: linear-gradient(135deg, #bd9d6b, #d4af77);
+      color: #2c2c2c;
+      border: none;
+      padding: 14px 28px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .dripspaceFooter-subscribe-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2c2c2c, #3a3a3a);
+      transition: left 0.4s ease;
+      z-index: 0;
+    }
+
+    .dripspaceFooter-subscribe-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .dripspaceFooter-subscribe-btn:hover::before {
+      left: 0;
+    }
+
+    .dripspaceFooter-subscribe-btn:hover span {
+      color: #d4af77;
+    }
+
+    .dripspaceFooter-subscribe-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(189, 157, 107, 0.4);
+    }
+
+    .dripspaceFooter-bottom {
+      padding: 30px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dripspaceFooter-copyright {
+      color: #999;
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    .dripspaceFooter-payment {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .dripspaceFooter-payment-icon {
+      width: 45px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(189, 157, 107, 0.2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #d4d4d4;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .dripspaceFooter-payment-icon:hover {
+      background: rgba(189, 157, 107, 0.1);
+      border-color: #d4af77;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 1024px) {
+      .dripspaceFooter-main {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 40px;
+      }
+
+      .dripspaceFooter-brand {
+        grid-column: 1 / -1;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dripspaceFooter-container {
+        padding: 60px 30px 0;
+      }
+
+      .dripspaceFooter-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .dripspaceFooter-newsletter {
+        grid-column: 1 / -1;
+      }
+
+      .dripspaceFooter-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dripspaceFooter-container {
+        padding: 50px 20px 0;
+      }
+
+      .dripspaceFooter-main {
+        grid-template-columns: 1fr;
+        gap: 35px;
+      }
+
+      .dripspaceFooter-logo {
+        font-size: 26px;
+        letter-spacing: 3px;
+      }
+
+      .dripspaceFooter-column h3 {
+        font-size: 15px;
+      }
+
+      .dripspaceFooter-payment {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <footer class="dripspaceFooter-container">
+    <div class="dripspaceFooter-main">
+      <div class="dripspaceFooter-brand">
+        <div class="dripspaceFooter-logo">DRIPSPACE</div>
+        <p class="dripspaceFooter-description">
+          Elevating your style with meticulously crafted luxury fashion. Where timeless elegance meets contemporary design.
+        </p>
+        <div class="dripspaceFooter-social">
+          <button class="dripspaceFooter-social-btn" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </button>
+          <button class="dripspaceFooter-social-btn" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </button>
+          <button class="dripspaceFooter-social-btn" aria-label="Twitter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+            </svg>
+          </button>
+          <button class="dripspaceFooter-social-btn" aria-label="Pinterest">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8.5 14.5c.5 2 2 3.5 3.5 3.5 3 0 5-4 5-7.5 0-3-2-5.5-5-5.5s-5.5 2.5-5.5 5.5c0 1.5.5 2.5 1.5 3"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="dripspaceFooter-column">
+        <h3>Shop</h3>
+        <ul class="dripspaceFooter-links">
+          <li><a href="#new-arrival">New Arrival</a></li>
+          <li><a href="#footwear">Footwear</a></li>
+          <li><a href="#clothing">Clothing</a></li>
+          <li><a href="#accessories">Accessories</a></li>
+          <li><a href="#sale">Sale</a></li>
+        </ul>
+      </div>
+
+      <div class="dripspaceFooter-column">
+        <h3>Company</h3>
+        <ul class="dripspaceFooter-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#careers">Careers</a></li>
+          <li><a href="#press">Press</a></li>
+          <li><a href="#stores">Store Locator</a></li>
+          <li><a href="#sustainability">Sustainability</a></li>
+        </ul>
+      </div>
+
+      <div class="dripspaceFooter-column">
+        <h3>Support</h3>
+        <ul class="dripspaceFooter-links">
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="{% url "faq" %}">FAQ</a></li>
+          <li><a href="#shipping">Shipping</a></li>
+          <li><a href="#returns">Returns</a></li>
+          <li><a href="#size-guide">Size Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="dripspaceFooter-column dripspaceFooter-newsletter">
+        <h3>Newsletter</h3>
+        <p>Subscribe to receive exclusive offers and the latest news from DripSpace.</p>
+        <div class="dripspaceFooter-input-group">
+          <input 
+            type="email" 
+            class="dripspaceFooter-input" 
+            placeholder="Enter your email"
+            aria-label="Email address"
+          >
+          <button class="dripspaceFooter-subscribe-btn">
+            <span>Subscribe</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dripspaceFooter-bottom">
+      <p class="dripspaceFooter-copyright">
+        © 2025 DripSpace. All rights reserved.
+      </p>
+      <div class="dripspaceFooter-payment">
+        <div class="dripspaceFooter-payment-icon">VISA</div>
+        <div class="dripspaceFooter-payment-icon">AMEX</div>
+        <div class="dripspaceFooter-payment-icon">GPAY</div>
+        <div class="dripspaceFooter-payment-icon">PYPL</div>
+      </div>
+    </div>
+  </footer>
+</div>

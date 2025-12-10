@@ -1,0 +1,423 @@
+<div class="dripspaceNavbar-navbar">
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Manrope:wght@400;500;600&display=swap');
+        
+        /* Reset and Base Styles */
+        .dripspaceNavbar-navbar * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* CSS Custom Properties for Design Tokens */
+        .dripspaceNavbar-navbar {
+            --ds-bg-primary: #FDFBF8;
+            --ds-bg-surface: #FFFFFF;
+            --ds-text-primary: #38302C;
+            --ds-text-secondary: #8A7F79;
+            --ds-accent-gold: #AE9A7F;
+            --ds-border-subtle: #EFEBE8;
+            
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            position: relative;
+        }
+        
+        /* Main Navbar Container */
+        .dripspaceNavbar-navbar {
+            background: var(--ds-bg-surface);
+            border-bottom: 1px solid var(--ds-border-subtle);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        /* Navbar Content Container */
+        .dripspaceNavbar-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            height: 96px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-lg);
+        }
+        
+        /* Brand Logo */
+        .dripspaceNavbar-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--ds-text-primary);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .dripspaceNavbar-logo:hover {
+            opacity: 0.8;
+        }
+        
+        /* Desktop Navigation */
+        .dripspaceNavbar-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .dripspaceNavbar-navLink {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--ds-text-primary);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+            position: relative;
+            padding: var(--space-xs) 0;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        .dripspaceNavbar-navLink:hover {
+            color: var(--ds-accent-gold);
+        }
+        
+        /* Underline Animation Effect */
+        .dripspaceNavbar-navLink::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 100%;
+            height: 1px;
+            background: var(--ds-accent-gold);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .dripspaceNavbar-navLink:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* Action Icons Container */
+        .dripspaceNavbar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+        
+        .dripspaceNavbar-actionIcon {
+            width: 24px;
+            height: 24px;
+            color: var(--ds-text-primary);
+            transition: color 0.3s ease-in-out;
+            cursor: pointer;
+            padding: var(--space-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+            min-height: 48px;
+        }
+        
+        .dripspaceNavbar-actionIcon:hover {
+            color: var(--ds-accent-gold);
+        }
+        
+        /* Mobile Menu Toggle */
+        .dripspaceNavbar-mobileToggle {
+            display: none;
+            width: 24px;
+            height: 24px;
+            color: var(--ds-text-primary);
+            cursor: pointer;
+            padding: var(--space-xs);
+            min-width: 48px;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Mobile Navigation Overlay */
+        .dripspaceNavbar-mobileNav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--ds-bg-surface);
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .dripspaceNavbar-mobileNav.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dripspaceNavbar-mobileNavLink {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--ds-text-primary);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            line-height: 1.8;
+            margin: var(--space-sm) 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(1) { transition-delay: 0.1s; }
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(2) { transition-delay: 0.175s; }
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(3) { transition-delay: 0.25s; }
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(4) { transition-delay: 0.325s; }
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(5) { transition-delay: 0.4s; }
+        .dripspaceNavbar-mobileNav.active .dripspaceNavbar-mobileNavLink:nth-child(6) { transition-delay: 0.475s; }
+        
+        .dripspaceNavbar-mobileNavLink:hover {
+            color: var(--ds-accent-gold);
+        }
+        
+        /* Mobile Close Button */
+        .dripspaceNavbar-mobileClose {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            width: 24px;
+            height: 24px;
+            color: var(--ds-text-primary);
+            cursor: pointer;
+            padding: var(--space-xs);
+            min-width: 48px;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Mobile Cart and Login in Header */
+        .dripspaceNavbar-mobileActions {
+            display: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dripspaceNavbar-container {
+                height: 72px;
+                padding: 0 var(--space-md);
+            }
+            
+            .dripspaceNavbar-nav {
+                display: none;
+            }
+            
+            .dripspaceNavbar-mobileToggle {
+                display: flex;
+            }
+            
+            .dripspaceNavbar-actions {
+                display: none;
+            }
+            
+            .dripspaceNavbar-mobileActions {
+                display: flex;
+                align-items: center;
+                gap: var(--space-sm);
+            }
+            
+            .dripspaceNavbar-logo {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dripspaceNavbar-container {
+                padding: 0 var(--space-sm);
+            }
+        }
+        
+        /* Animation for hamburger to X */
+        .dripspaceNavbar-hamburger.active .dripspaceNavbar-hamburgerLine:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .dripspaceNavbar-hamburger.active .dripspaceNavbar-hamburgerLine:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .dripspaceNavbar-hamburger.active .dripspaceNavbar-hamburgerLine:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .dripspaceNavbar-hamburgerLine {
+            width: 20px;
+            height: 2px;
+            background: currentColor;
+            transition: all 0.4s ease-in-out;
+            transform-origin: center;
+        }
+        
+        .dripspaceNavbar-hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+    </style>
+    
+    <!-- Desktop Navbar -->
+    <div class="dripspaceNavbar-container">
+        <!-- Mobile Menu Toggle -->
+        <div class="dripspaceNavbar-mobileToggle dripspaceNavbar-hamburger">
+            <div class="dripspaceNavbar-hamburgerLine"></div>
+            <div class="dripspaceNavbar-hamburgerLine"></div>
+            <div class="dripspaceNavbar-hamburgerLine"></div>
+        </div>
+        
+        <!-- Brand Logo -->
+        <a href="#" class="dripspaceNavbar-logo">DripSpace</a>
+        
+        <!-- Desktop Navigation -->
+        <nav class="dripspaceNavbar-nav">
+            <a href="{% url "home" %}" class="dripspaceNavbar-navLink">Home</a>
+            <a href="#" class="dripspaceNavbar-navLink">New Arrival</a>
+            <a href="#" class="dripspaceNavbar-navLink">Footwear</a>
+            <a href="#" class="dripspaceNavbar-navLink">Clothing</a>
+            <a href="#" class="dripspaceNavbar-navLink">Accessories</a>
+            <a href="#" class="dripspaceNavbar-navLink">Sale</a>
+        </nav>
+        
+        <!-- Action Icons -->
+        <div class="dripspaceNavbar-actions">
+            <div class="dripspaceNavbar-actionIcon" title="Login">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="dripspaceNavbar-actionIcon" title="Wishlist">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.54871 7.04097 1.54871 8.5C1.54871 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7564 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.39464C21.7564 5.72718 21.351 5.12084 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="dripspaceNavbar-actionIcon" title="Cart">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Mobile Actions -->
+        <div class="dripspaceNavbar-mobileActions">
+            <div class="dripspaceNavbar-actionIcon" title="Cart">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="dripspaceNavbar-actionIcon" title="Login">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Navigation Overlay -->
+    <div class="dripspaceNavbar-mobileNav">
+        <div class="dripspaceNavbar-mobileClose">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <a href="{% url "home" %}" class="dripspaceNavbar-mobileNavLink">Home</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">New Arrival</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">Footwear</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">Clothing</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">Accessories</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">Sale</a>
+        <a href="#" class="dripspaceNavbar-mobileNavLink">Wishlist</a>
+    </div>
+    
+    <script>
+        (function() {
+            const mobileToggle = document.querySelector('.dripspaceNavbar-mobileToggle');
+            const mobileNav = document.querySelector('.dripspaceNavbar-mobileNav');
+            const mobileClose = document.querySelector('.dripspaceNavbar-mobileClose');
+            const hamburger = document.querySelector('.dripspaceNavbar-hamburger');
+            const mobileNavLinks = document.querySelectorAll('.dripspaceNavbar-mobileNavLink');
+            
+            // Toggle mobile menu
+            function toggleMobileMenu() {
+                mobileNav.classList.toggle('active');
+                hamburger.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            }
+            
+            // Close mobile menu
+            function closeMobileMenu() {
+                mobileNav.classList.remove('active');
+                hamburger.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Event listeners
+            mobileToggle.addEventListener('click', toggleMobileMenu);
+            mobileClose.addEventListener('click', closeMobileMenu);
+            
+            // Close menu when clicking on nav links
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (mobileNav.classList.contains('active') && 
+                    !mobileNav.contains(e.target) && 
+                    !mobileToggle.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        })();
+    </script>
+</div>

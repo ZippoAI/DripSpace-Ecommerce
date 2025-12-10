@@ -1,0 +1,754 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}Store Locations | DripSpace - Premium Fashion{% endblock %}
+
+{% block meta_description %}Find your nearest DripSpace store location. Visit our premium fashion retail locations across India to experience our collection in person and get personalized styling assistance.{% endblock %}
+
+{% block meta_keywords %}store locations, retail stores, fashion stores, drip space stores, physical stores, India{% endblock %}
+
+{% block content %}
+
+<!-- DripSpace Store Locator Section -->
+<div class="dripspace-storelocator-section">
+  <!-- Header -->
+  <div class="locator-header">
+    <h1 class="section-title">Find a DripSpace Store</h1>
+    <p class="section-subtitle">Visit us at any of our premium locations across India</p>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="location-search-container">
+    <div class="location-search-bar">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" id="storeSearch" placeholder="Search by city or state..." class="search-input">
+    </div>
+    <select id="stateFilter" class="state-filter-dropdown">
+      <option value="all">All States</option>
+      <option value="Assam">Assam</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Maharashtra">Maharashtra</option>
+      <option value="Karnataka">Karnataka</option>
+      <option value="West Bengal">West Bengal</option>
+      <option value="Telangana">Telangana</option>
+    </select>
+  </div>
+
+  <!-- Store Results Container -->
+  <div class="store-results-wrapper">
+    <!-- Store Cards Grid -->
+    <div class="store-cards-grid" id="storeCardsContainer">
+      <!-- Store cards will be dynamically inserted here -->
+    </div>
+
+    <!-- Map Placeholder -->
+    <div class="map-placeholder" id="interactiveMap">
+      <canvas id="mapCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Demo Disclaimer -->
+  <div class="demo-disclaimer">
+    <p>* These are demonstration locations for display purposes only</p>
+  </div>
+</div>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.dripspace-storelocator-section {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 60px 20px 40px;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styles */
+.locator-header {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeInDown 0.8s ease;
+}
+
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+/* Search Container */
+.location-search-container {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  display: flex;
+  gap: 15px;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.location-search-bar {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 20px;
+  color: #999;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 18px 20px 18px 52px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.1);
+}
+
+.state-filter-dropdown {
+  padding: 18px 24px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  min-width: 180px;
+}
+
+.state-filter-dropdown:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.1);
+}
+
+/* Store Results Wrapper */
+.store-results-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+/* Store Cards Grid */
+.store-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Store Card */
+.store-card-premium {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #f0f0f0;
+  position: relative;
+  overflow: hidden;
+  animation: slideInCard 0.6s ease both;
+}
+
+.store-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+  transform: scaleY(0);
+  transition: transform 0.4s ease;
+  transform-origin: bottom;
+}
+
+.store-card-premium:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.15);
+}
+
+.store-card-premium:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.store-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.store-name-heading {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.store-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #555;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.detail-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #dc2626;
+}
+
+.detail-text {
+  flex: 1;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.map-action-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  letter-spacing: 0.3px;
+}
+
+.map-action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+}
+
+.map-action-button:active {
+  transform: translateY(0);
+}
+
+/* Map Placeholder */
+.map-placeholder {
+  background: #f8f9fa;
+  border-radius: 16px;
+  height: 600px;
+  position: sticky;
+  top: 20px;
+  border: 1px solid #e8e8e8;
+  overflow: visible;
+  position: relative;
+}
+
+#mapCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.map-location-marker {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #dc2626;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: markerBounce 2s ease infinite;
+  margin-left: -15px;
+  margin-top: -30px;
+  z-index: 5;
+}
+
+.map-location-marker::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-location-marker:hover {
+  transform: rotate(-45deg) scale(1.2);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+  z-index: 10;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+  border: 1px solid #f0f0f0;
+}
+
+.map-tooltip.visible {
+  opacity: 1;
+}
+
+@keyframes markerBounce {
+  0%, 100% {
+    transform: rotate(-45deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+
+/* Demo Disclaimer */
+.demo-disclaimer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 8px;
+}
+
+.demo-disclaimer p {
+  font-size: 11px;
+  color: #999;
+  font-weight: 300;
+  letter-spacing: 0.2px;
+  opacity: 0.6;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInCard {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .store-results-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .map-placeholder {
+    position: relative;
+    height: 400px;
+    top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .dripspace-storelocator-section {
+    padding: 40px 16px 30px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+  }
+
+  .location-search-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .state-filter-dropdown {
+    width: 100%;
+  }
+
+  .store-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .store-card-premium {
+    padding: 24px;
+  }
+
+  .store-name-heading {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .search-input {
+    padding: 16px 16px 16px 48px;
+  }
+
+  .state-filter-dropdown {
+    padding: 16px 20px;
+  }
+
+  .store-card-premium {
+    padding: 20px;
+  }
+}
+</style>
+
+<script>
+// Store Data with map coordinates
+const stores = [
+  {
+    name: "DripSpace Guwahati",
+    address: "GS Road, Guwahati",
+    state: "Assam",
+    city: "Guwahati",
+    phone: "+91 XXXXX 00001",
+    hours: "10:00 AM - 9:00 PM",
+    mapLink: "https://maps.google.com/?q=GS+Road+Guwahati",
+    coordinates: { x: 75, y: 35 } // Percentage positions on map
+  },
+  {
+    name: "DripSpace Delhi",
+    address: "Connaught Place, New Delhi",
+    state: "Delhi",
+    city: "Delhi",
+    phone: "+91 XXXXX 00002",
+    hours: "10:00 AM - 10:00 PM",
+    mapLink: "https://maps.google.com/?q=Connaught+Place+Delhi",
+    coordinates: { x: 42, y: 28 }
+  },
+  {
+    name: "DripSpace Mumbai",
+    address: "Bandra West, Mumbai",
+    state: "Maharashtra",
+    city: "Mumbai",
+    phone: "+91 XXXXX 00003",
+    hours: "11:00 AM - 10:00 PM",
+    mapLink: "https://maps.google.com/?q=Bandra+West+Mumbai",
+    coordinates: { x: 30, y: 52 }
+  },
+  {
+    name: "DripSpace Bengaluru",
+    address: "Indiranagar, Bengaluru",
+    state: "Karnataka",
+    city: "Bengaluru",
+    phone: "+91 XXXXX 00004",
+    hours: "10:30 AM - 9:30 PM",
+    mapLink: "https://maps.google.com/?q=Indiranagar+Bengaluru",
+    coordinates: { x: 40, y: 70 }
+  },
+  {
+    name: "DripSpace Kolkata",
+    address: "Park Street, Kolkata",
+    state: "West Bengal",
+    city: "Kolkata",
+    phone: "+91 XXXXX 00005",
+    hours: "10:00 AM - 9:00 PM",
+    mapLink: "https://maps.google.com/?q=Park+Street+Kolkata",
+    coordinates: { x: 68, y: 42 }
+  },
+  {
+    name: "DripSpace Hyderabad",
+    address: "Banjara Hills, Hyderabad",
+    state: "Telangana",
+    city: "Hyderabad",
+    phone: "+91 XXXXX 00006",
+    hours: "10:00 AM - 9:30 PM",
+    mapLink: "https://maps.google.com/?q=Banjara+Hills+Hyderabad",
+    coordinates: { x: 45, y: 60 }
+  }
+];
+
+let currentFilteredStores = [...stores];
+
+// Create store card HTML
+function createStoreCard(store, index) {
+  return `
+    <div class="store-card-premium" style="animation-delay: ${index * 0.1}s">
+      <div class="store-info-block">
+        <div>
+          <h3 class="store-name-heading">${store.name}</h3>
+        </div>
+        
+        <div class="store-detail-item">
+          <svg class="detail-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <div class="detail-text">
+            <span class="detail-label">Address</span>
+            ${store.address}
+          </div>
+        </div>
+
+        <div class="store-detail-item">
+          <svg class="detail-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <div class="detail-text">
+            <span class="detail-label">Contact</span>
+            ${store.phone}
+          </div>
+        </div>
+
+        <div class="store-detail-item">
+          <svg class="detail-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <div class="detail-text">
+            <span class="detail-label">Hours</span>
+            ${store.hours}
+          </div>
+        </div>
+
+        <button class="map-action-button" onclick="window.open('${store.mapLink}', '_blank')">
+          View on Map
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Filter and render stores
+function renderStores(filteredStores) {
+  const container = document.getElementById('storeCardsContainer');
+  
+  if (filteredStores.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 20px; opacity: 0.5;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <p style="font-size: 18px; font-weight: 300;">No stores found matching your search</p>
+      </div>
+    `;
+  } else {
+    container.innerHTML = filteredStores.map((store, index) => createStoreCard(store, index)).join('');
+  }
+  
+  renderMap(filteredStores);
+}
+
+// Draw interactive map with markers
+function renderMap(storesToShow) {
+  const canvas = document.getElementById('mapCanvas');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const mapContainer = document.getElementById('interactiveMap');
+  
+  // Set canvas size to match container
+  const rect = mapContainer.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  
+  // Draw gradient background
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, '#f0f4f8');
+  gradient.addColorStop(1, '#e8eef4');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw grid lines
+  ctx.strokeStyle = '#e0e6ec';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 8; i++) {
+    const y = (canvas.height / 8) * i;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+    
+    const x = (canvas.width / 8) * i;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  
+  // Draw simplified India shape
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  
+  // India outline
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.moveTo(w * 0.42, h * 0.12);
+  ctx.lineTo(w * 0.48, h * 0.18);
+  ctx.lineTo(w * 0.56, h * 0.22);
+  ctx.lineTo(w * 0.64, h * 0.26);
+  ctx.lineTo(w * 0.72, h * 0.32);
+  ctx.lineTo(w * 0.75, h * 0.42);
+  ctx.lineTo(w * 0.72, h * 0.54);
+  ctx.lineTo(w * 0.68, h * 0.66);
+  ctx.lineTo(w * 0.62, h * 0.76);
+  ctx.lineTo(w * 0.54, h * 0.82);
+  ctx.lineTo(w * 0.46, h * 0.85);
+  ctx.lineTo(w * 0.38, h * 0.84);
+  ctx.lineTo(w * 0.30, h * 0.78);
+  ctx.lineTo(w * 0.26, h * 0.68);
+  ctx.lineTo(w * 0.25, h * 0.56);
+  ctx.lineTo(w * 0.28, h * 0.44);
+  ctx.lineTo(w * 0.32, h * 0.32);
+  ctx.lineTo(w * 0.38, h * 0.20);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  
+  // Remove existing markers and tooltips
+  const existingMarkers = mapContainer.querySelectorAll('.map-location-marker, .map-tooltip');
+  existingMarkers.forEach(marker => marker.remove());
+  
+  // Add markers for each visible store
+  storesToShow.forEach((store, index) => {
+    setTimeout(() => {
+      // Create marker
+      const marker = document.createElement('div');
+      marker.className = 'map-location-marker';
+      marker.style.left = store.coordinates.x + '%';
+      marker.style.top = store.coordinates.y + '%';
+      
+      // Create tooltip
+      const tooltip = document.createElement('div');
+      tooltip.className = 'map-tooltip';
+      tooltip.textContent = store.city;
+      tooltip.style.left = `calc(${store.coordinates.x}% + 20px)`;
+      tooltip.style.top = `calc(${store.coordinates.y}% - 50px)`;
+      
+      // Add event listeners
+      marker.addEventListener('mouseenter', () => {
+        tooltip.classList.add('visible');
+      });
+      
+      marker.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('visible');
+      });
+      
+      marker.addEventListener('click', () => {
+        window.open(store.mapLink, '_blank');
+      });
+      
+      // Append to map
+      mapContainer.appendChild(marker);
+      mapContainer.appendChild(tooltip);
+    }, index * 100);
+  });
+}
+
+// Filter functionality
+function filterStores() {
+  const searchTerm = document.getElementById('storeSearch').value.toLowerCase();
+  const stateFilter = document.getElementById('stateFilter').value;
+
+  let filtered = stores;
+
+  // Filter by state
+  if (stateFilter !== 'all') {
+    filtered = filtered.filter(store => store.state === stateFilter);
+  }
+
+  // Filter by search term
+  if (searchTerm) {
+    filtered = filtered.filter(store => 
+      store.name.toLowerCase().includes(searchTerm) ||
+      store.city.toLowerCase().includes(searchTerm) ||
+      store.state.toLowerCase().includes(searchTerm) ||
+      store.address.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  currentFilteredStores = filtered;
+  renderStores(filtered);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  renderStores(stores);
+
+  // Add event listeners
+  document.getElementById('storeSearch').addEventListener('input', filterStores);
+  document.getElementById('stateFilter').addEventListener('change', filterStores);
+  
+  // Redraw map on window resize
+  window.addEventListener('resize', () => {
+    renderMap(currentFilteredStores);
+  });
+});
+</script>
+{% endblock content %}

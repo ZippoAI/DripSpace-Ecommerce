@@ -1,0 +1,518 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}{{ category.name }} Products | DripSpace - Premium Fashion{% endblock %}
+
+{% block meta_description %}Shop {{ category.name }} collection at DripSpace. Discover premium quality {{ category.name }} products and the latest fashion trends.{% endblock %}
+
+{% block meta_keywords %}{{ category.name }}, fashion, premium, clothing, drip space{% endblock %}
+
+{% block content %}
+<!-- DripSpace "Category Products" Section - Django Template -->
+<div class="dripspace-products-section">
+  <!-- Google Fonts: Playfair Display + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Products Container -->
+  <div class="products-container">
+    <!-- Page Title -->
+    <div class="products-header">
+      <h1 class="products-title">{{ category.name }}</h1>
+      <p class="products-subtitle">Explore our collection of {{ category.name }}</p>
+    </div>
+    
+    <!-- Product Grid Row -->
+    <div class="drippace-product-grid">
+      
+      {% for product in products %}
+      <!-- Product Card -->
+      <div class="dripspace-product-card" data-product="{{ product.slug }}">
+        <div class="product-image-container">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+          <div class="product-hover-overlay">
+            <a href="{% url 'productDetail' product.slug %}" class="view-details-btn">View Details</a>
+          </div>
+        </div>
+        <div class="product-info-block">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-category">{{ product.category.name }}</p>
+          <p class="product-price">₹{{ product.price }}</p>
+          <button class="add-to-cart-btn" onclick="redirectToProductDetail('{{ product.slug }}')">Add to Cart</button>
+        </div>
+      </div>
+      {% empty %}
+      <p>No products available in this category.</p>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+
+<style>
+/* CSS Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* DripSpace Color System */
+:root {
+  --accent-red: #B80000;
+  --background: #FFFFFF;
+  --border-subtle: #EAEAEA;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --overlay: rgba(17, 17, 17, 0.7);
+  
+  /* Spacing System */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-xxl: 96px;
+}
+
+/* Body and Container */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.dripspace-products-section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  font-family: 'Inter', sans-serif;
+}
+
+.products-container {
+  width: 100%;
+}
+
+/* Header Styles */
+.products-header {
+  text-align: center;
+  margin-bottom: var(--space-xxl);
+}
+
+.products-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.products-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Product Grid Layout - UPDATED FOR MOBILE */
+.drippace-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns for mobile */
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+/* Product Card Styles - Optimized for mobile */
+.dripspace-product-card {
+  background: var(--background);
+  cursor: pointer;
+  transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.dripspace-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(17, 17, 17, 0.1);
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  margin-bottom: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease-in-out;
+}
+
+.dripspace-product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.product-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(184, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.dripspace-product-card:hover .product-hover-overlay {
+  opacity: 1;
+}
+
+.view-details-btn {
+  background: var(--background);
+  color: var(--accent-red);
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 200ms ease;
+  text-decoration: none;
+  width: 90%;
+  text-align: center;
+}
+
+.view-details-btn:hover {
+  transform: scale(1.05);
+}
+
+.product-info-block {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px; /* Slightly smaller for mobile */
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  position: relative;
+  min-height: 44px; /* Ensure consistent height for product names */
+}
+
+.dripspace-product-card:hover .product-name::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-red);
+  transform: scaleX(1);
+  transition: transform 300ms ease-in-out;
+}
+
+.product-name::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-red);
+  transform: scaleX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.product-category {
+  font-size: 12px; /* Smaller for mobile */
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.product-price {
+  font-size: 14px; /* Smaller for mobile */
+  font-weight: 600; /* Bold price for better visibility */
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  background: var(--accent-red);
+  color: var(--background);
+  border: none;
+  padding: var(--space-sm) var(--space-xs);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; /* Smaller for mobile */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+  margin-top: auto;
+}
+
+.add-to-cart-btn:hover {
+  background: #CC0000;
+  transform: scale(0.98);
+}
+
+/* Additional hover and interaction improvements */
+.dripspace-product-card:focus {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 2px;
+}
+
+.add-to-cart-btn:focus,
+.view-details-btn:focus {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Design - Mobile First (UPDATED) */
+@media (max-width: 480px) {
+  .drippace-product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on very small screens */
+    gap: 12px; /* Smaller gap on mobile */
+  }
+  
+  .dripspace-products-section {
+    padding: 16px; /* Reduced padding on mobile */
+  }
+  
+  .products-header {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .products-title {
+    font-size: 36px; /* Smaller title on mobile */
+  }
+  
+  .products-subtitle {
+    font-size: 14px;
+  }
+  
+  .product-name {
+    font-size: 14px;
+    min-height: 38px;
+  }
+  
+  .product-category {
+    font-size: 11px;
+  }
+  
+  .product-price {
+    font-size: 13px;
+  }
+  
+  .add-to-cart-btn {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  
+  .view-details-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .drippace-product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+    gap: 16px;
+  }
+  
+  .products-title {
+    font-size: 42px;
+  }
+  
+  .dripspace-products-section {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .drippace-product-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on larger tablets */
+    gap: var(--space-md);
+  }
+  
+  .products-title {
+    font-size: 48px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .drippace-product-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+    gap: var(--space-lg);
+  }
+}
+
+/* For very large screens */
+@media (min-width: 1440px) {
+  .drippace-product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+  }
+}
+
+/* Touch device optimization */
+@media (hover: none) and (pointer: coarse) {
+  .product-hover-overlay {
+    display: none; /* Hide hover effects on touch devices */
+  }
+  
+  .dripspace-product-card:active {
+    transform: scale(0.98);
+  }
+  
+  .add-to-cart-btn:active {
+    transform: scale(0.95);
+  }
+}
+</style>
+
+<script>
+// Django Product Data - This would be populated from your Django view/context
+const productData = {
+  {% for product in products %}
+  '{{ product.slug }}': {
+    name: '{{ product.name|escapejs }}',
+    category: '{{ product.category.name|escapejs }}',
+    price: '₹{{ product.price|escapejs }}',
+    image: '{{ product.image.url|escapejs }}',
+    description: '{{ product.description|default:"Premium quality product crafted for everyday comfort and style."|escapejs }}'
+  }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+};
+
+// Initialize event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Add click event listeners to all product cards
+  const productCards = document.querySelectorAll('.dripspace-product-card');
+  productCards.forEach(card => {
+    card.addEventListener('click', function(e) {
+      // Don't open modal if clicking on add to cart button
+      if (!e.target.classList.contains('add-to-cart-btn') && !e.target.classList.contains('view-details-btn')) {
+        const productId = this.getAttribute('data-product');
+        // Redirect to product detail page instead of opening modal
+        window.location.href = '/productInfo/' + productId + '/';
+      }
+    });
+  });
+  
+  // Touch device optimization
+  if ('ontouchstart' in window) {
+    // Add touch feedback
+    productCards.forEach(card => {
+      card.addEventListener('touchstart', function() {
+        this.style.opacity = '0.9';
+      });
+      
+      card.addEventListener('touchend', function() {
+        this.style.opacity = '1';
+      });
+    });
+  }
+});
+
+// Add to cart function - now redirects to product detail page
+function redirectToProductDetail(slug) {
+  // Show warning message
+  showNotification('Please select a size on the product page before adding to cart');
+  
+  // Redirect to product detail page after a short delay
+  setTimeout(function() {
+    window.location.href = '/productInfo/' + slug + '/';
+  }, 2000);
+}
+
+// Show notification function
+function showNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-red);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    animation: slideInRight 300ms ease-out;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 300px;
+  `;
+  notification.textContent = message;
+  
+  // Add to page
+  document.body.appendChild(notification);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.animation = 'slideOutRight 300ms ease-in';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Add notification animations to CSS
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(notificationStyles);
+</script>
+{% endblock %}

@@ -1,0 +1,1007 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}Men's Size Guide | DripSpace - Premium Fashion{% endblock %}
+
+{% block meta_description %}Find your perfect fit with DripSpace's comprehensive men's size guide. Get detailed measurements for tops, bottoms, and footwear to ensure the best fit for your premium fashion pieces.{% endblock %}
+
+{% block meta_keywords %}size guide, sizing chart, men's clothing sizes, fit guide, drip space, clothing measurements{% endblock %}
+
+{% block content %}
+
+<div class="dripspace-sizeguide-section">
+    <!-- Main Container -->
+    <div class="size-guide-container">
+        <!-- Section Header -->
+        <div class="guide-header">
+            <h2 class="section-title">Men's Size Guide</h2>
+            <p class="section-description">Find your perfect fit with our comprehensive sizing measurements</p>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="guide-content-grid">
+            <!-- Measurement Illustration -->
+            <div class="premium-measure-illustration">
+                <div class="illustration-wrapper">
+                    <svg class="measurement-silhouette" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Basic male silhouette -->
+                        <g class="silhouette-body">
+                            <!-- Head -->
+                            <circle cx="100" cy="40" r="25" class="silhouette-line"/>
+                            <!-- Torso -->
+                            <path d="M 75 65 Q 75 85 75 110 L 75 160 Q 75 180 90 190 L 110 190 Q 125 180 125 160 L 125 110 Q 125 85 125 65 Z" class="silhouette-line"/>
+                            <!-- Arms -->
+                            <path d="M 75 75 L 60 110 L 60 150" class="silhouette-line"/>
+                            <path d="M 125 75 L 140 110 L 140 150" class="silhouette-line"/>
+                            <!-- Legs -->
+                            <path d="M 90 190 L 85 240 L 80 280" class="silhouette-line"/>
+                            <path d="M 110 190 L 115 240 L 120 280" class="silhouette-line"/>
+                        </g>
+                        
+                        <!-- Measurement lines -->
+                        <g class="measurement-lines">
+                            <!-- Chest measurement -->
+                            <line x1="60" y1="95" x2="140" y2="95" class="measure-line chest-measure" stroke-dasharray="4"/>
+                            <text x="30" y="95" class="measure-label chest-label">CHEST</text>
+                            
+                            <!-- Waist measurement -->
+                            <line x1="65" y1="130" x2="135" y2="130" class="measure-line waist-measure" stroke-dasharray="4"/>
+                            <text x="25" y="130" class="measure-label waist-label">WAIST</text>
+                            
+                            <!-- Hip measurement -->
+                            <line x1="70" y1="165" x2="130" y2="165" class="measure-line hip-measure" stroke-dasharray="4"/>
+                            <text x="20" y="165" class="measure-label hip-label">HIP</text>
+                            
+                            <!-- Inseam measurement -->
+                            <line x1="100" y1="190" x2="100" y2="280" class="measure-line inseam-measure" stroke-dasharray="4"/>
+                            <text x="105" y="235" class="measure-label inseam-label">INSEAM</text>
+                            
+                            <!-- Shoe length measurement -->
+                            <line x1="115" y1="280" x2="125" y2="280" class="measure-line shoe-measure" stroke-dasharray="4"/>
+                            <text x="130" y="285" class="measure-label shoe-label">SHOE</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Size Chart Container -->
+            <div class="size-chart-container">
+                <!-- Tab Navigation -->
+                <div class="men-size-tab" role="tablist">
+                    <button class="tab-button active" data-tab="tops" role="tab" aria-selected="true">
+                        Tops
+                    </button>
+                    <button class="tab-button" data-tab="bottoms" role="tab" aria-selected="false">
+                        Bottoms
+                    </button>
+                    <button class="tab-button" data-tab="footwear" role="tab" aria-selected="false">
+                        Footwear
+                    </button>
+                </div>
+
+                <!-- Size Chart Content -->
+                <div class="chart-content">
+                    <!-- Tops Tab Content -->
+                    <div class="tab-panel active" id="tops-panel" role="tabpanel">
+                        <h3 class="panel-title">T-Shirts & Shirts</h3>
+                        <div class="table-wrapper">
+                            <table class="measurement-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SIZE</th>
+                                        <th scope="col" class="measurement-header" data-measure="chest">CHEST (CM)</th>
+                                        <th scope="col" class="measurement-header" data-measure="waist">WAIST (CM)</th>
+                                        <th scope="col" class="measurement-header" data-measure="hip">SHOULDER (CM)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="size-label">XS</td>
+                                        <td>86-91</td>
+                                        <td>71-76</td>
+                                        <td>42-44</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">S</td>
+                                        <td>96-101</td>
+                                        <td>79-84</td>
+                                        <td>45-47</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">M</td>
+                                        <td>106-111</td>
+                                        <td>86-91</td>
+                                        <td>48-50</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">L</td>
+                                        <td>116-121</td>
+                                        <td>97-102</td>
+                                        <td>52-54</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">XL</td>
+                                        <td>127-132</td>
+                                        <td>107-112</td>
+                                        <td>55-57</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">XXL</td>
+                                        <td>137-142</td>
+                                        <td>117-122</td>
+                                        <td>59-61</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Bottoms Tab Content -->
+                    <div class="tab-panel" id="bottoms-panel" role="tabpanel">
+                        <h3 class="panel-title">Pants & Jeans</h3>
+                        <div class="table-wrapper">
+                            <table class="measurement-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SIZE</th>
+                                        <th scope="col" class="measurement-header" data-measure="waist">WAIST (CM)</th>
+                                        <th scope="col" class="measurement-header" data-measure="hip">HIP (CM)</th>
+                                        <th scope="col" class="measurement-header" data-measure="inseam">INSEAM (CM)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="size-label">XS</td>
+                                        <td>71-76</td>
+                                        <td>86-91</td>
+                                        <td>76-81</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">S</td>
+                                        <td>79-84</td>
+                                        <td>94-99</td>
+                                        <td>78-83</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">M</td>
+                                        <td>86-91</td>
+                                        <td>102-107</td>
+                                        <td>81-86</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">L</td>
+                                        <td>97-102</td>
+                                        <td>112-117</td>
+                                        <td>84-89</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">XL</td>
+                                        <td>107-112</td>
+                                        <td>122-127</td>
+                                        <td>86-91</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">XXL</td>
+                                        <td>117-122</td>
+                                        <td>132-137</td>
+                                        <td>89-94</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Footwear Tab Content -->
+                    <div class="tab-panel" id="footwear-panel" role="tabpanel">
+                        <h3 class="panel-title">Shoes</h3>
+                        <div class="table-wrapper">
+                            <table class="measurement-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">US SIZE</th>
+                                        <th scope="col" class="measurement-header" data-measure="shoe">LENGTH (CM)</th>
+                                        <th scope="col" class="measurement-header" data-measure="shoe">WIDTH (CM)</th>
+                                        <th scope="col">EU SIZE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="size-label">7</td>
+                                        <td>25.4</td>
+                                        <td>9.5</td>
+                                        <td>40</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">8</td>
+                                        <td>26.0</td>
+                                        <td>9.7</td>
+                                        <td>41</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">9</td>
+                                        <td>26.7</td>
+                                        <td>10.0</td>
+                                        <td>42</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">10</td>
+                                        <td>27.3</td>
+                                        <td>10.2</td>
+                                        <td>43</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">11</td>
+                                        <td>28.0</td>
+                                        <td>10.5</td>
+                                        <td>44</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="size-label">12</td>
+                                        <td>28.6</td>
+                                        <td>10.7</td>
+                                        <td>45</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="measurement-tips">
+            <h4 class="tips-title">Measuring Tips</h4>
+            <ul class="tips-list">
+                <li>Measure yourself wearing minimal clothing for the most accurate results</li>
+                <li>Use a soft measuring tape and keep it parallel to the ground</li>
+                <li>For chest measurements, wrap the tape around the fullest part</li>
+                <li>For waist measurements, find your natural waistline</li>
+                <li>For inseam measurements, measure from crotch to desired hem length</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+/* CSS Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #F8F9FA;
+    color: #111827;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Custom Properties (Design Tokens) */
+:root {
+    /* Colors */
+    --primary-500: #C91D3E;
+    --bg-page: #F8F9FA;
+    --bg-surface: #FFFFFF;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --border-subtle: #E5E7EB;
+    --bg-stripe: #F8F9FA;
+    
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    
+    /* Typography */
+    --font-size-h2: 2rem;
+    --font-size-h3: 1rem;
+    --font-size-table-header: 0.875rem;
+    --font-size-body: 1rem;
+    --font-size-small: 0.75rem;
+    
+    /* Border Radius */
+    --radius: 16px;
+    
+    /* Shadows */
+    --shadow-lg: 0 8px 32px rgba(201, 29, 62, 0.08);
+}
+
+/* Main Section Container */
+.dripspace-sizeguide-section {
+    width: 100%;
+    padding: var(--space-lg);
+    background-color: var(--bg-page);
+}
+
+.size-guide-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--bg-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+/* Section Header */
+.guide-header {
+    padding: var(--space-3xl) var(--space-3xl) var(--space-2xl);
+    text-align: center;
+}
+
+.section-title {
+    font-size: var(--font-size-h2);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.section-description {
+    font-size: var(--font-size-body);
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Main Content Grid */
+.guide-content-grid {
+    display: grid;
+    gap: var(--space-3xl);
+    padding: 0 var(--space-3xl) var(--space-3xl);
+}
+
+/* Premium Measurement Illustration */
+.premium-measure-illustration {
+    background-color: var(--bg-stripe);
+    border-radius: var(--radius);
+    padding: var(--space-2xl);
+    position: relative;
+}
+
+.illustration-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+.measurement-silhouette {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+}
+
+.silhouette-line {
+    fill: none;
+    stroke: var(--border-subtle);
+    stroke-width: 1.5;
+}
+
+.measure-line {
+    fill: none;
+    stroke: var(--text-secondary);
+    stroke-width: 1;
+    stroke-dasharray: 4;
+    transition: stroke 250ms ease-in-out;
+}
+
+.measure-label {
+    font-size: 10px;
+    font-weight: 500;
+    fill: var(--text-secondary);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: fill 250ms ease-in-out;
+}
+
+.measure-line.active,
+.measure-label.active {
+    stroke: var(--primary-500);
+    fill: var(--primary-500);
+}
+
+/* Size Chart Container */
+.size-chart-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tab Navigation */
+.men-size-tab {
+    display: flex;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-xl);
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--font-size-h3);
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 250ms ease-in-out;
+    position: relative;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: var(--text-primary);
+}
+
+.tab-button.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--primary-500);
+    animation: tabIndicator 250ms ease-in-out;
+}
+
+@keyframes tabIndicator {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Tab Panel Content */
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+    animation: fadeIn 300ms ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel-title {
+    font-size: var(--font-size-h3);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--bg-stripe);
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-500);
+}
+
+/* Measurement Table */
+.measurement-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-surface);
+    min-width: 500px;
+}
+
+.measurement-table th,
+.measurement-table td {
+    padding: var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.measurement-table th {
+    font-size: var(--font-size-table-header);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    background-color: var(--bg-stripe);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.measurement-table td {
+    font-size: var(--font-size-body);
+    color: var(--text-primary);
+    transition: background-color 200ms ease-in-out;
+}
+
+.measurement-table tbody tr:hover {
+    background-color: var(--bg-stripe);
+}
+
+.measurement-table tbody tr:nth-child(odd) {
+    background-color: var(--bg-stripe);
+}
+
+.measurement-table tbody tr:nth-child(odd):hover {
+    background-color: rgba(201, 29, 62, 0.05);
+}
+
+.size-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Measurement Header Hover Effects */
+.measurement-header {
+    cursor: pointer;
+    position: relative;
+    transition: color 250ms ease-in-out;
+}
+
+.measurement-header:hover {
+    color: var(--primary-500);
+}
+
+.measurement-header::after {
+    content: '↕';
+    position: absolute;
+    right: var(--space-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 250ms ease-in-out;
+}
+
+.measurement-header:hover::after {
+    opacity: 1;
+}
+
+/* Measurement Tips */
+.measurement-tips {
+    padding: var(--space-2xl) var(--space-3xl);
+    background-color: var(--bg-stripe);
+    margin-top: var(--space-lg);
+}
+
+.tips-title {
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.tips-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.tips-list li {
+    font-size: var(--font-size-body);
+    color: var(--text-secondary);
+    position: relative;
+    padding-left: var(--space-lg);
+}
+
+.tips-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-500);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+    .guide-content-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+        padding: 0 var(--space-xl) var(--space-xl);
+    }
+    
+    .premium-measure-illustration {
+        padding: var(--space-lg);
+    }
+    
+    .illustration-wrapper {
+        min-height: 300px;
+    }
+    
+    .guide-header {
+        padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .measurement-tips {
+        padding: var(--space-xl);
+    }
+}
+
+@media (max-width: 767px) {
+    .dripspace-sizeguide-section {
+        padding: var(--space-sm);
+    }
+    
+    .guide-header {
+        padding: var(--space-lg) var(--space-md);
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .section-description {
+        font-size: 0.9rem;
+    }
+    
+    .guide-content-grid {
+        padding: 0 var(--space-md) var(--space-lg);
+        gap: var(--space-lg);
+    }
+    
+    .men-size-tab {
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+    }
+    
+    .tab-button {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.875rem;
+    }
+    
+    .measurement-table th,
+    .measurement-table td {
+        padding: var(--space-sm);
+        font-size: 0.875rem;
+    }
+    
+    .measurement-tips {
+        padding: var(--space-md);
+    }
+    
+    .tips-list li {
+        font-size: 0.875rem;
+    }
+    
+    .illustration-wrapper {
+        min-height: 250px;
+    }
+    
+    .measurement-silhouette {
+        max-width: 200px;
+    }
+}
+
+/* Focus States for Accessibility */
+.tab-button:focus,
+.measurement-header:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .dripspace-sizeguide-section {
+        background: white;
+    }
+    
+    .size-guide-container {
+        box-shadow: none;
+    }
+    
+    .tab-button {
+        display: none;
+    }
+    
+    .tab-panel {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+    
+    .measurement-tips {
+        page-break-inside: avoid;
+    }
+}
+</style>
+
+<script>
+// Interactive functionality for the Men's Size Guide
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    
+    // Initialize with first tab active
+    function activateTab(tabId) {
+        // Remove active class from all tabs and panels
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+        });
+        
+        tabPanels.forEach(panel => {
+            panel.classList.remove('active');
+        });
+        
+        // Activate selected tab
+        const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+        const activePanel = document.getElementById(`${tabId}-panel`);
+        
+        if (activeButton && activePanel) {
+            activeButton.classList.add('active');
+            activeButton.setAttribute('aria-selected', 'true');
+            activePanel.classList.add('active');
+        }
+        
+        // Clear any active measurement highlights
+        clearMeasurementHighlights();
+    }
+    
+    // Add click listeners to tab buttons
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            activateTab(tabId);
+        });
+        
+        // Add keyboard navigation
+        button.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                
+                const currentIndex = Array.from(tabButtons).indexOf(this);
+                let nextIndex;
+                
+                if (e.key === 'ArrowRight') {
+                    nextIndex = (currentIndex + 1) % tabButtons.length;
+                } else {
+                    nextIndex = currentIndex === 0 ? tabButtons.length - 1 : currentIndex - 1;
+                }
+                
+                tabButtons[nextIndex].focus();
+                tabButtons[nextIndex].click();
+            }
+        });
+    });
+    
+    // Measurement illustration highlighting
+    const measurementHeaders = document.querySelectorAll('.measurement-header');
+    
+    function clearMeasurementHighlights() {
+        // Remove active class from all measurement lines and labels
+        const activeLines = document.querySelectorAll('.measure-line.active');
+        const activeLabels = document.querySelectorAll('.measure-label.active');
+        
+        activeLines.forEach(line => line.classList.remove('active'));
+        activeLabels.forEach(label => label.classList.remove('active'));
+    }
+    
+    function highlightMeasurement(measureType) {
+        clearMeasurementHighlights();
+        
+        // Add active class to corresponding measurement elements
+        const line = document.querySelector(`.${measureType}-measure`);
+        const label = document.querySelector(`.${measureType}-label`);
+        
+        if (line) line.classList.add('active');
+        if (label) label.classList.add('active');
+    }
+    
+    // Add hover listeners to measurement headers
+    measurementHeaders.forEach(header => {
+        header.addEventListener('mouseenter', function() {
+            const measureType = this.getAttribute('data-measure');
+            if (measureType) {
+                highlightMeasurement(measureType);
+            }
+        });
+        
+        header.addEventListener('mouseleave', function() {
+            // Keep the highlight for 500ms after mouse leaves
+            setTimeout(() => {
+                // Only clear if no other measurement header is being hovered
+                const anyHovered = Array.from(measurementHeaders).some(h => h.matches(':hover'));
+                if (!anyHovered) {
+                    clearMeasurementHighlights();
+                }
+            }, 500);
+        });
+    });
+    
+    // Smooth scroll to table when tab is switched
+    function smoothScrollToTable() {
+        const activePanel = document.querySelector('.tab-panel.active');
+        if (activePanel) {
+            activePanel.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+    }
+    
+    // Update tab activation to include smooth scroll
+    const originalActivateTab = activateTab;
+    activateTab = function(tabId) {
+        originalActivateTab(tabId);
+        setTimeout(smoothScrollToTable, 100);
+    };
+    
+    // Initialize with first tab
+    activateTab('tops');
+    
+    // Table sorting functionality (optional enhancement)
+    const tables = document.querySelectorAll('.measurement-table');
+    
+    tables.forEach(table => {
+        const headers = table.querySelectorAll('.measurement-header');
+        
+        headers.forEach(header => {
+            header.addEventListener('click', function() {
+                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // Simple toggle between ascending/descending
+                const isCurrentlySorted = header.classList.contains('sorted-asc');
+                
+                // Remove sorting classes from all headers
+                headers.forEach(h => {
+                    h.classList.remove('sorted-asc', 'sorted-desc');
+                });
+                
+                // Sort rows
+                rows.sort((a, b) => {
+                    const aValue = a.children[columnIndex].textContent.trim();
+                    const bValue = b.children[columnIndex].textContent.trim();
+                    
+                    // Try to parse as numbers, fall back to string comparison
+                    const aNum = parseFloat(aValue);
+                    const bNum = parseFloat(bValue);
+                    
+                    if (!isNaN(aNum) && !isNaN(bNum)) {
+                        return isCurrentlySorted ? bNum - aNum : aNum - bNum;
+                    } else {
+                        return isCurrentlySorted ? 
+                            bValue.localeCompare(aValue) : 
+                            aValue.localeCompare(bValue);
+                    }
+                });
+                
+                // Apply new sort class
+                header.classList.add(isCurrentlySorted ? 'sorted-desc' : 'sorted-asc');
+                
+                // Rebuild tbody
+                tbody.innerHTML = '';
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+    
+    // Add animation on scroll (optional enhancement)
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for scroll animations
+    const animatedElements = document.querySelectorAll('.premium-measure-illustration, .size-chart-container');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        observer.observe(el);
+    });
+    
+    // Add touch support for mobile measurement highlighting
+    measurementHeaders.forEach(header => {
+        header.addEventListener('touchstart', function() {
+            const measureType = this.getAttribute('data-measure');
+            if (measureType) {
+                highlightMeasurement(measureType);
+            }
+        });
+    });
+    
+    // Clear highlights when touching outside
+    document.addEventListener('touchstart', function(e) {
+        if (!e.target.closest('.measurement-header')) {
+            setTimeout(() => {
+                clearMeasurementHighlights();
+            }, 2000); // Keep highlight for 2 seconds on touch
+        }
+    });
+    
+    // Performance optimization: Debounce scroll events
+    let scrollTimeout;
+    function handleScroll() {
+        if (scrollTimeout) {
+            cancelAnimationFrame(scrollTimeout);
+        }
+        scrollTimeout = requestAnimationFrame(() => {
+            // Any scroll-based functionality can be added here
+        });
+    }
+    
+    document.addEventListener('scroll', handleScroll, { passive: true });
+});
+
+// Additional utility functions
+function formatSizeGuide() {
+    // Function to format the size guide for different use cases
+    const currentTab = document.querySelector('.tab-button.active');
+    if (currentTab) {
+        const tabId = currentTab.getAttribute('data-tab');
+        const panel = document.getElementById(`${tabId}-panel`);
+        const table = panel.querySelector('.measurement-table');
+        
+        return {
+            category: tabId,
+            measurements: Array.from(table.querySelectorAll('tr')).map(row => {
+                const cells = row.querySelectorAll('td, th');
+                return Array.from(cells).map(cell => cell.textContent.trim());
+            })
+        };
+    }
+    return null;
+}
+
+// Export for potential use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { formatSizeGuide };
+}
+</script>
+
+{% endblock content %}

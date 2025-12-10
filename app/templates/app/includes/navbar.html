@@ -1,0 +1,803 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-family: sans-serif;
+            background-color: #ffffff;
+            color: #111;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        header {
+            width: 100%;
+            background: transparent;
+            transition: background 0.3s ease;
+        }
+
+        /* header:hover {
+            background: #999393;
+        } */
+
+        .top-banner {
+            color: rgb(0, 0, 0);
+            padding: 14px 0;
+            text-align: center;
+            font-size:clamp(1.5rem , 3.5vw , 4vw) ;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            width: 100%;
+            padding: 1.2rem 2.5rem;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: #000000;
+            font-size: 1.5rem;
+            font-weight: 600;
+            z-index: 1001;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links li {
+            color: #000000;
+            font-size: 1rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 12px;
+            letter-spacing: 1.2px;
+            font-weight: 400;
+            transition: color 0.3s;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: #262626;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .nav-icons button {
+            border: none;
+            padding: 5px;
+            outline: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-icons svg {
+            height: 22px;
+            width: 22px;
+            stroke: #000000;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Cart badge styles */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        input{
+            width: 0;
+            outline: none;
+            border: none;
+            background-color: #e0e0e0;
+            padding: 0.4rem 1rem;
+            border-radius: 18px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        input.input-open{
+            opacity: 1;
+            width: 250px;
+        }
+
+        .account {
+            position: absolute;
+            top: 100%;
+            right: -20%;
+            max-width: 250px;
+            width: 200px;
+            display: flex;
+            height: 0;
+            overflow: hidden;
+            flex-direction: column;
+            z-index: 99999;
+            transition: all 0.5s ease;
+            background: rgb(60, 60, 60);
+            border-radius: 18px;
+        }
+        .account-padding{
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+
+        }
+
+        .account a {
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .account a:hover {
+            text-decoration: underline;
+            color: #d9d9d9;
+
+        }
+
+        .account.open {
+            display: flex;
+            height: 160px;
+        }
+
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #cfcfcf;
+            padding: 0 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, padding 0.4s ease-in-out;
+            display: flex;
+        }
+
+        .mega-menu.active {
+            max-height: 90vh;
+            min-height: 40vh;
+            opacity: 1;
+            padding: 40px;
+        }
+
+        .mega-column {
+            flex: 1;
+            padding: 0 30px;
+        }
+
+        .mega-column h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .mega-column ul li {
+            margin-bottom: 12px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mega-column ul li a {
+            text-decoration: none;
+            color: #666;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+            display: inline-block;
+            letter-spacing: 1.2px;
+        }
+
+        .mega-column ul li a:hover {
+            color: #d32f2f;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #090909;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        .hamburger-sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 320px;
+            max-width: 85%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 10000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .hamburger-sidebar.open {
+            left: 0;
+        }
+
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hamburger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hamburger-header h2 {
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #020202;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .hamburger-content {
+            padding: 1rem 0;
+        }
+
+        .hamburger-section {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hamburger-section-title {
+            padding: 1rem 1.5rem;
+            font-size: 14px;
+            font-weight: 400;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .hamburger-section-title:hover {
+            background: #f5f5f5;
+        }
+
+        .hamburger-section-title i {
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger-section-title.active i {
+            transform: rotate(180deg);
+        }
+
+        .hamburger-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f9f9f9;
+        }
+
+        .hamburger-submenu.open {
+            max-height: 500px;
+        }
+
+        .hamburger-submenu ul {
+            padding: 0.5rem 0;
+        }
+
+        .hamburger-submenu li {
+            padding: 0;
+        }
+
+        .hamburger-submenu a {
+            display: block;
+            padding: 0.75rem 2.5rem;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-submenu a:hover {
+            background: #ffffff;
+            color: #313131;
+            padding-left: 3rem;
+        }
+
+        .hamburger-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 1rem;
+        }
+
+        .hamburger-footer a {
+            display: block;
+            padding: 0.75rem 0;
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .hamburger-footer a:hover {
+            color: #252525;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hamburger-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0.8rem 1.4rem;
+            }
+
+
+            .mega-menu {
+                display: none !important;
+            }
+
+            .account {
+                right: 0;
+                transform: translateX(100%);
+            }
+
+            .account.open {
+                transform: translateX(0);
+            }
+        input.input-open{
+            opacity: 1;
+            width: 180px;
+        }
+        .logo{
+            display: none;
+        }
+        }
+
+</style>
+    <header>
+        <!-- <div class="top-banner">
+            Authentic
+        </div> -->
+
+        <nav>
+            <!-- Hamburger Menu Button -->
+            <button class="hamburger-menu-btn" aria-label="Open Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <a href="{% url "home" %}" class="logo">DripSpace</a>
+
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" onmouseenter="showMenu('home')">Home</a></li>
+                <li><a href="{% url 'newArrival' %}" onmouseenter="showMenu('new')">New Arrivals</a></li>
+
+                
+                <!-- Dynamic Footwear Menu -->
+                {% for head_category in head_categories %}
+                    {% if head_category.name == 'Footwear' %}
+                        <li>
+                            <a href="#" onmouseenter="showMenu('footwear')">{{ head_category.name }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                <!-- Dynamic Men/Clothing Menu -->
+                {% for head_category in head_categories %}
+                    {% if head_category.name == 'Clothing' %}
+                        <li>
+                            <a href="#" onmouseenter="showMenu('men')">Men</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+            </ul>
+
+            <div class="nav-icons">
+                <button aria-label="Search" id="inputOpen">
+                    <input type="search" placeholder="Search" id="input">
+                    <svg viewBox="0 0 24 24" id="searchIcon">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>                    
+
+                <button class="js-open" aria-label="Account">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+                <button aria-label="Cart" id="cartBtn">
+                    <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                </button>
+                <div class="account">
+                    <div class="account-padding">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'userProfile' %}">Profile</a>
+                        <a href="#">Settings</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class="js-sign-up" href="{% url 'login' %}">Sign In</a>
+                        <a class="js-slide" href="{% url 'register' %}">Create Account</a>
+                        <a href="#">Track Order</a>
+                    {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Mega Menus -->
+
+            <div class="mega-menu" id="footwear-menu" onmouseleave="hideMenu()">
+                {% for head_category in head_categories %}
+                    {% if head_category.name == 'Footwear' %}
+                        <div class="mega-column">
+                            <h3>{{ head_category.name }} Categories</h3>
+                            <ul>
+                                {% for category in head_category.categories.all %}
+                                    <li><a href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="mega-menu" id="men-menu" onmouseleave="hideMenu()">
+                {% for head_category in head_categories %}
+                    {% if head_category.name == 'Clothing' %}
+                        <div class="mega-column">
+                            <h3>{{ head_category.name }} Categories</h3>
+                            <ul>
+                                {% for category in head_category.categories.all %}
+                                    <li><a href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+
+        </nav>
+    </header>
+
+    <!-- Hamburger Sidebar -->
+    <div class="hamburger-overlay"></div>
+    <div class="hamburger-sidebar">
+        <div class="hamburger-header">
+            <h2>Branding</h2>
+            <button class="close-btn" aria-label="Close Menu">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div class="hamburger-content">
+            <div class="hamburger-section">
+                <div class="hamburger-section-title">
+                    <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">Home</a>
+                </div>
+            </div>
+
+            <div class="hamburger-section">
+                <div class="hamburger-section-title">
+                    <a href="{% url 'newArrival' %}" style="text-decoration: none; color: inherit;">New Arrivals</a>
+                </div>
+            </div>
+
+
+            <!-- Dynamic Footwear Section -->
+            {% for head_category in head_categories %}
+                {% if head_category.name == 'Footwear' %}
+                    <div class="hamburger-section">
+                        <div class="hamburger-section-title">
+                            {{ head_category.name }}
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="hamburger-submenu">
+                            <ul>
+                                {% for category in head_category.categories.all %}
+                                    <li><a href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Dynamic Men/Clothing Section -->
+            {% for head_category in head_categories %}
+                {% if head_category.name == 'Clothing' %}
+                    <div class="hamburger-section">
+                        <div class="hamburger-section-title">
+                            Men
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="hamburger-submenu">
+                            <ul>
+                                {% for category in head_category.categories.all %}
+                                    <li><a href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+            <!-- Account section for hamburger menu -->
+            <div class="hamburger-section">
+                <div class="hamburger-section-title">
+                    Account
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hamburger-submenu">
+                    <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'userProfile' %}">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Sign In</a></li>
+                        <li><a href="{% url 'register' %}">Create Account</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Content -->
+
+    <script>
+        // Mega Menu Logic
+        let currentMenu = null;
+
+        function showMenu(menu) {
+            hideMenu();
+            const menuElm = document.getElementById(menu + '-menu');
+            if (menuElm) {
+                menuElm.classList.add('active');
+                currentMenu = menuElm;
+            }
+        }
+
+        function hideMenu() {
+            if (currentMenu) {
+                currentMenu.classList.remove('active');
+                currentMenu = null;
+            }
+        }
+
+        // Account Dropdown
+        const accountBtn = document.querySelector('.js-open');
+        const accountBox = document.querySelector('.account');
+       // const input = document.getElementById('input')
+       // const inputBtn = document.getElementById('inputOpen')
+        const searchIcon = document.getElementById('searchIcon')
+        const cartBtn = document.getElementById('cartBtn');
+        const cartBadge = document.getElementById('cartBadge');
+
+        accountBtn.addEventListener('click', () => {
+            accountBox.classList.toggle('open');
+        });
+        
+        // Modify search icon to go directly to search page
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => {
+                window.location.href = '{% url "search_products" %}';
+            });
+        }
+        
+        // Add click event to cart button to go to cart page
+        if (cartBtn) {
+            cartBtn.addEventListener('click', () => {
+                window.location.href = '{% url "view_cart" %}';
+            });
+        }
+        /*
+        inputBtn.addEventListener('click', () => {
+            input.classList.add('input-open');
+            input.focus(); // Focus on the input when it opens
+        });
+        */
+        // Add search functionality when Enter is pressed in the input
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Function to perform search
+        function performSearch() {
+            const query = input.value.trim();
+            if (query) {
+                window.location.href = '{% url "search_products" %}?q=' + encodeURIComponent(query);
+            }
+        }
+        
+        // Function to update cart badge
+        function updateCartBadge() {
+            // Make an AJAX request to get the current cart item count
+            fetch('{% url "get_cart_count" %}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const count = data.cart_total_items;
+                        if (count > 0) {
+                            cartBadge.textContent = count;
+                            cartBadge.style.display = 'flex';
+                        } else {
+                            cartBadge.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart badge:', error);
+                });
+        }
+        
+        // Update cart badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (cartBadge) {
+                updateCartBadge();
+            }
+        });
+
+        // Hamburger Menu Logic
+        const hamburgerBtn = document.querySelector('.hamburger-menu-btn');
+        const closeBtn = document.querySelector('.close-btn');
+        const hamburgerSidebar = document.querySelector('.hamburger-sidebar');
+        const hamburgerOverlay = document.querySelector('.hamburger-overlay');
+        let sectionTitles = document.querySelectorAll('.hamburger-section-title');
+
+        // Open hamburger menu
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerSidebar.classList.add('open');
+            hamburgerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close hamburger menu
+        function closeHamburgerMenu() {
+            hamburgerSidebar.classList.remove('open');
+            hamburgerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        closeBtn.addEventListener('click', closeHamburgerMenu);
+        hamburgerOverlay.addEventListener('click', closeHamburgerMenu);
+
+        // Toggle submenu in hamburger
+        function setupHamburgerSubmenus() {
+            sectionTitles = document.querySelectorAll('.hamburger-section-title');
+            sectionTitles.forEach(title => {
+                title.addEventListener('click', () => {
+                    const submenu = title.nextElementSibling;
+                    const isOpen = submenu.classList.contains('open');
+
+                    // Close all submenus
+                    document.querySelectorAll('.hamburger-submenu').forEach(menu => {
+                        menu.classList.remove('open');
+                    });
+                    document.querySelectorAll('.hamburger-section-title').forEach(t => {
+                        t.classList.remove('active');
+                    });
+
+                    // Toggle current submenu
+                    if (!isOpen) {
+                        submenu.classList.add('open');
+                        title.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Set up hamburger submenus after DOM content loads
+        document.addEventListener('DOMContentLoaded', setupHamburgerSubmenus);
+
+        // Close hamburger on ESC key
+        document.addEventListener('keydown', (e) => {
+            // Only handle ESC key if hamburger menu is open and the event target is not an input field
+            if (e.key === 'Escape' && hamburgerSidebar.classList.contains('open')) {
+                // Check if the target is not an input, textarea, or select element
+                const target = e.target;
+                if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA' && target.tagName !== 'SELECT') {
+                    closeHamburgerMenu();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

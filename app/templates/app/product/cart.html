@@ -1,0 +1,868 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}Shopping Cart | DripSpace - Premium Fashion{% endblock %}
+
+{% block meta_description %}Review and manage your shopping cart at DripSpace. Complete your premium fashion purchase with our secure checkout process.{% endblock %}
+
+{% block meta_keywords %}shopping cart, fashion, premium, checkout, drip space{% endblock %}
+
+{% block content %}
+
+<!-- DripSpace Cart Section -->
+<div class="dripspace-cart-root">
+  <!-- Toast Notification -->
+  <div class="ds-toast" id="dsToast" role="alert" aria-live="polite"></div>
+
+  <!-- Cart Content Wrapper -->
+  <div class="ds-cart-wrapper">
+    
+    <!-- Cart Items Section -->
+    <div class="ds-cart-items-section">
+      <div class="ds-section-header">
+        <h1 class="ds-page-title">Shopping Cart</h1>
+        <span class="ds-item-count" id="dsItemCount">
+          {% if cart_items %}
+            {{ cart_items|length }} {% if cart_items|length == 1 %}item{% else %}items{% endif %}
+          {% else %}
+            0 items
+          {% endif %}
+        </span>
+      </div>
+
+      <!-- Cart Items List -->
+      <div class="ds-cart-list" id="dsCartList">
+        {% for item in cart_items %}
+        <div class="ds-cart-row" data-id="{{ item.id }}">
+          <img 
+            src="{{ item.product.image.url }}" 
+            alt="{{ item.product.name }}" 
+            class="ds-product-thumb"
+          />
+          
+          <div class="ds-product-details">
+            <div class="ds-product-header">
+              <div class="ds-product-info">
+                <a href="{% url 'productDetail' item.product.slug %}" class="ds-product-title-link" aria-label="View {{ item.product.name }}">
+                  {{ item.product.name }}
+                </a>
+                <div class="ds-product-meta">
+                  {{ item.product.category.name }}{% if item.display_size %} · Size {{ item.display_size }}{% endif %} · {{ item.product.name }}
+                </div>
+              </div>
+              
+              <button 
+                class="ds-remove-btn" 
+                onclick="removeItem({{ item.id }})"
+                aria-label="Remove {{ item.product.name }} from cart"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="ds-product-footer">
+              <div class="ds-price-section">
+                <div class="ds-unit-price">Rs. {{ item.product.price }}</div>
+                <div class="ds-line-total" data-id="{{ item.id }}">
+                  Rs. {{ item.get_total_price }}
+                </div>
+              </div>
+              
+              <div class="ds-qty-control">
+                <button 
+                  class="ds-qty-btn ds-qty-btn-minus" 
+                  onclick="updateQuantity({{ item.id }}, -1)"
+                  aria-label="Decrease quantity"
+                  {% if item.quantity <= 1 %}disabled{% endif %}
+                >−</button>
+                
+                <span class="ds-qty-display" data-id="{{ item.id }}">{{ item.quantity }}</span>
+                
+                <button 
+                  class="ds-qty-btn ds-qty-btn-plus" 
+                  onclick="updateQuantity({{ item.id }}, 1)"
+                  aria-label="Increase quantity"
+                >+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <!-- Empty Cart State (hidden by default) -->
+        <div class="ds-empty-cart" id="dsEmptyCart">
+          <svg class="ds-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <h2 class="ds-empty-title">Your cart is empty</h2>
+          <p class="ds-empty-text">Start adding items to experience premium fashion at DripSpace</p>
+          <a href="{% url 'AllProduct' %}" class="ds-empty-cta">Explore Collections</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Cart Summary Section -->
+    <div class="ds-cart-summary">
+      <h2 class="ds-summary-title">Order Summary</h2>
+      
+      {% if cart_items %}
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Subtotal</span>
+        <span class="ds-summary-value" id="dsSubtotal">Rs. {{ cart.get_total_price|floatformat:2 }}</span>
+      </div>
+      
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Discount</span>
+        <span class="ds-summary-value ds-discount">-Rs. 20.00</span>
+      </div>
+      
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Shipping</span>
+        <span class="ds-summary-value">Rs. 15.00</span>
+      </div>
+      
+      <div class="ds-summary-divider"></div>
+      
+      <div class="ds-summary-row ds-summary-total">
+        <span class="ds-summary-label">Total</span>
+        <span class="ds-summary-value" id="dsTotal">Rs. {{ cart.get_total_price|add:"15"|add:"-20"|floatformat:2 }}</span>
+      </div>
+      {% else %}
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Subtotal</span>
+        <span class="ds-summary-value" id="dsSubtotal">Rs. 0.00</span>
+      </div>
+      
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Discount</span>
+        <span class="ds-summary-value ds-discount">-Rs. 0.00</span>
+      </div>
+      
+      <div class="ds-summary-row">
+        <span class="ds-summary-label">Shipping</span>
+        <span class="ds-summary-value">Rs. 0.00</span>
+      </div>
+      
+      <div class="ds-summary-divider"></div>
+      
+      <div class="ds-summary-row ds-summary-total">
+        <span class="ds-summary-label">Total</span>
+        <span class="ds-summary-value" id="dsTotal">Rs. 0.00</span>
+      </div>
+      {% endif %}
+      
+      <a href="{% url 'checkout' %}" class="ds-checkout-cta" id="dsCheckoutBtn" {% if not cart_items %}disabled{% endif %}>
+        Continue to Checkout
+      </a>
+      
+      <a href="{% url 'AllProduct' %}" class="ds-continue-shopping">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Continue Shopping
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ==========================================
+   DripSpace Cart - Core Styles
+   ========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.dripspace-cart-root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+  padding: 24px 16px;
+  min-height: 100vh;
+}
+
+/* Toast Notification */
+.ds-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #1a1a1a;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 320px;
+}
+
+.ds-toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Cart Wrapper */
+.ds-cart-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+/* Section Header */
+.ds-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ds-page-title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.ds-item-count {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Cart Items List */
+.ds-cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cart Row/Card */
+.ds-cart-row {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-cart-row.removing {
+  animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* Product Thumbnail */
+.ds-product-thumb {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f5f5f5;
+}
+
+/* Product Details */
+.ds-product-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ds-product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ds-product-info {
+  flex: 1;
+}
+
+.ds-product-title-link {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 6px;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.ds-product-title-link:hover {
+  color: #dc2626;
+}
+
+.ds-product-title-link:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.ds-product-meta {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Remove Button */
+.ds-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #999;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-remove-btn:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.ds-remove-btn:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+.ds-remove-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+/* Product Footer */
+.ds-product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Price */
+.ds-price-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-unit-price {
+  font-size: 12px;
+  color: #999;
+}
+
+.ds-line-total {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Quantity Controls */
+.ds-qty-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.ds-qty-btn {
+  background: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ds-qty-btn:hover:not(:disabled) {
+  background: #dc2626;
+  color: white;
+  transform: scale(1.05);
+}
+
+.ds-qty-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-qty-btn:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+.ds-qty-display {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* Cart Summary */
+.ds-cart-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 24px;
+  height: fit-content;
+}
+
+.ds-summary-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.01em;
+}
+
+.ds-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ds-summary-label {
+  font-size: 15px;
+  color: #666;
+}
+
+.ds-summary-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ds-discount {
+  color: #dc2626;
+}
+
+.ds-summary-divider {
+  height: 1px;
+  background: #e5e5e5;
+  margin: 20px 0;
+}
+
+.ds-summary-total {
+  margin-bottom: 24px;
+}
+
+.ds-summary-total .ds-summary-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ds-summary-total .ds-summary-value {
+  font-size: 20px;
+}
+
+/* Checkout CTA */
+.ds-checkout-cta {
+  width: 100%;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.ds-checkout-cta:hover:not(:disabled):not([disabled]) {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.ds-checkout-cta:disabled,
+.ds-checkout-cta[disabled] {
+  background: #e5e5e5;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+  pointer-events: none;
+}
+
+.ds-checkout-cta:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Continue Shopping Link */
+.ds-continue-shopping {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ds-continue-shopping:hover {
+  color: #dc2626;
+}
+
+.ds-continue-shopping svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Empty Cart State */
+.ds-empty-cart {
+  text-align: center;
+  padding: 80px 24px;
+  background: white;
+  border-radius: 12px;
+}
+
+.ds-empty-icon {
+  width: 80px;
+  height: 80px;
+  color: #e5e5e5;
+  margin: 0 auto 24px;
+}
+
+.ds-empty-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
+}
+
+.ds-empty-text {
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 32px 0;
+  line-height: 1.6;
+}
+
+.ds-empty-cta {
+  display: inline-block;
+  background: #dc2626;
+  color: white;
+  padding: 14px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.ds-empty-cta:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* ==========================================
+   Responsive Design - Tablet & Desktop
+   ========================================== */
+
+@media (min-width: 768px) {
+  .dripspace-cart-root {
+    padding: 40px 32px;
+  }
+
+  .ds-cart-wrapper {
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+  }
+
+  .ds-page-title {
+    font-size: 32px;
+  }
+
+  .ds-cart-row {
+    padding: 24px;
+    grid-template-columns: 120px 1fr;
+    gap: 20px;
+  }
+
+  .ds-product-thumb {
+    width: 120px;
+    height: 120px;
+  }
+
+  .ds-product-footer {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-cart-row:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+}
+</style>
+
+<script>
+/* ==========================================
+  DripSpace Cart - JavaScript Logic
+  ========================================== */
+
+// Constants
+const DISCOUNT = 20.00;
+const SHIPPING = 15.00;
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  updateSummary();
+});
+
+// Update quantity
+function updateQuantity(id, delta) {
+  const qtyDisplay = document.querySelector(`.ds-qty-display[data-id="${id}"]`);
+  const lineTotal = document.querySelector(`.ds-line-total[data-id="${id}"]`);
+  const row = document.querySelector(`.ds-cart-row[data-id="${id}"]`);
+  const minusBtn = row.querySelector('.ds-qty-btn-minus');
+  
+  if (!qtyDisplay || !lineTotal) return;
+  
+  let currentQty = parseInt(qtyDisplay.textContent);
+  let newQty = currentQty + delta;
+  
+  if (newQty < 1) return;
+  
+  // Send AJAX request to update quantity
+  fetch('{% url "update_cart_item" %}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({
+      item_id: id,
+      quantity: newQty
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Update quantity display
+      qtyDisplay.textContent = newQty;
+      
+      // Update line total display
+      const unitPriceText = row.querySelector('.ds-unit-price').textContent;
+      const unitPrice = parseFloat(unitPriceText.replace('Rs. ', ''));
+      const newTotal = (unitPrice * newQty).toFixed(2);
+      lineTotal.textContent = `Rs. ${newTotal}`;
+      
+      // Disable minus button at quantity 1
+      if (minusBtn) {
+        minusBtn.disabled = newQty <= 1;
+      }
+      
+      // Update summary
+      updateSummary();
+      
+      // Show notification
+      showToast(`Updated quantity to ${newQty}`);
+    } else {
+      showToast(data.message || 'Error updating quantity');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showToast('Error updating quantity');
+  });
+}
+
+// Remove item
+function removeItem(id) {
+  // Send AJAX request to remove item
+  fetch('{% url "remove_cart_item" %}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({
+      item_id: id
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const row = document.querySelector(`.ds-cart-row[data-id="${id}"]`);
+      if (row) {
+        row.classList.add('removing');
+        
+        setTimeout(() => {
+          row.remove();
+          updateSummary();
+          showToast(data.message);
+        }, 300);
+      }
+    } else {
+      showToast(data.message || 'Error removing item');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showToast('Error removing item');
+  });
+}
+
+// Update summary totals
+function updateSummary() {
+  // Calculate subtotal
+  let subtotal = 0;
+  const lineTotals = document.querySelectorAll('.ds-line-total');
+  
+  lineTotals.forEach(element => {
+    const amountText = element.textContent;
+    const amount = parseFloat(amountText.replace('Rs. ', ''));
+    if (!isNaN(amount)) {
+      subtotal += amount;
+    }
+  });
+  
+  // Update display
+  document.getElementById('dsSubtotal').textContent = `Rs. ${subtotal.toFixed(2)}`;
+  
+  // Only show discount and shipping if there are items in the cart
+  const discountElement = document.querySelector('.ds-discount');
+  if (lineTotals.length > 0) {
+    const total = subtotal - DISCOUNT + SHIPPING;
+    document.getElementById('dsTotal').textContent = `Rs. ${total.toFixed(2)}`;
+    if (discountElement) {
+      discountElement.textContent = `-Rs. ${DISCOUNT.toFixed(2)}`;
+    }
+    // Update shipping display to show actual value
+    const shippingElements = document.querySelectorAll('.ds-summary-row');
+    shippingElements.forEach(element => {
+      const labelElement = element.querySelector('.ds-summary-label');
+      if (labelElement && labelElement.textContent === 'Shipping') {
+        const valueElement = element.querySelector('.ds-summary-value');
+        if (valueElement) {
+          valueElement.textContent = `Rs. ${SHIPPING.toFixed(2)}`;
+        }
+      }
+    });
+  } else {
+    document.getElementById('dsTotal').textContent = `Rs. 0.00`;
+    if (discountElement) {
+      discountElement.textContent = `-Rs. 0.00`;
+    }
+    // Update shipping display to show zero
+    const shippingElements = document.querySelectorAll('.ds-summary-row');
+    shippingElements.forEach(element => {
+      const labelElement = element.querySelector('.ds-summary-label');
+      if (labelElement && labelElement.textContent === 'Shipping') {
+        const valueElement = element.querySelector('.ds-summary-value');
+        if (valueElement) {
+          valueElement.textContent = `Rs. 0.00`;
+        }
+      }
+    });
+  }
+  
+  // Update item count
+  const cartItems = document.querySelectorAll('.ds-cart-row');
+  const itemCount = document.getElementById('dsItemCount');
+  if (itemCount) {
+    itemCount.textContent = `${cartItems.length} ${cartItems.length === 1 ? 'item' : 'items'}`;
+  }
+  
+  // Enable/disable checkout button
+  const checkoutBtn = document.getElementById('dsCheckoutBtn');
+  if (checkoutBtn) {
+    checkoutBtn.disabled = cartItems.length === 0;
+  }
+}
+
+// Show toast notification
+function showToast(message) {
+  const toast = document.getElementById('dsToast');
+  if (toast) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Make functions global
+window.updateQuantity = updateQuantity;
+window.removeItem = removeItem;
+window.getCookie = getCookie;
+</script>
+{% endblock %}

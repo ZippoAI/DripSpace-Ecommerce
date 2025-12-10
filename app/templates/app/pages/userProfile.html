@@ -1,0 +1,976 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}My Profile | DripSpace - Premium Fashion{% endblock %}
+
+{% block meta_description %}Manage your DripSpace profile information, preferences, and account settings. Update your personal details, shipping address, and preferred size for a personalized shopping experience.{% endblock %}
+
+{% block meta_keywords %}user profile, account settings, personal information, drip space, profile management{% endblock %}
+
+{% block content %}
+<!-- DripSpace User Profile Section -->
+<div class="ds-profile-root">
+  <!-- Profile Header -->
+  <div class="ds-profile-header">
+    <h1 class="ds-profile-title">My Profile</h1>
+    <p class="ds-profile-subtitle">Manage your personal information and preferences</p>
+  </div>
+
+  <!-- Display messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} ds-success-message show">
+        <svg class="ds-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Profile Card Container -->
+  <div class="ds-profile-card">
+    <!-- View Mode (Default) -->
+    <div class="ds-view-mode" id="viewMode">
+      <!-- Profile Picture Display -->
+      <div class="ds-profile-pic-container">
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" 
+               alt="Profile Picture" 
+               class="ds-profile-pic" 
+               id="displayPicture">
+        {% else %}
+          <img src="https://raw.githubusercontent.com/ZippoAI/DripSpace-Design/main/assets/images/avatar.png" 
+     alt="Profile Picture" 
+     class="ds-profile-pic" 
+     id="displayPicture">
+        {% endif %}
+        <div class="ds-pic-overlay">
+          <svg class="ds-camera-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+        </div>
+      </div>
+
+      <!-- User Info Grid -->
+      <div class="ds-user-info-block">
+        <div class="ds-info-row">
+          <div class="ds-info-item">
+            <span class="ds-info-label">Full Name</span>
+            <span class="ds-info-value" id="displayName">{{ profile.full_name|default:profile.user.username }}</span>
+          </div>
+          <div class="ds-info-item">
+            <span class="ds-info-label">Gender</span>
+            <span class="ds-info-value" id="displayGender">{{ profile.gender|default:"Not specified" }}</span>
+          </div>
+        </div>
+
+        <div class="ds-info-row">
+          <div class="ds-info-item">
+            <span class="ds-info-label">Phone Number</span>
+            <span class="ds-info-value" id="displayPhone">{{ profile.user.phone_no|default:"Not specified" }}</span>
+          </div>
+          <div class="ds-info-item">
+            <span class="ds-info-label">Preferred Size</span>
+            <span class="ds-info-value" id="displaySize">{{ profile.size|default:"Not specified" }}</span>
+          </div>
+        </div>
+
+        <div class="ds-info-row ds-info-full">
+          <div class="ds-info-item">
+            <span class="ds-info-label">Address</span>
+            <span class="ds-info-value" id="displayAddress">{{ profile.address|default:"Not specified" }}</span>
+          </div>
+        </div>
+
+        <div class="ds-info-row">
+          <div class="ds-info-item">
+            <span class="ds-info-label">City</span>
+            <span class="ds-info-value" id="displayCity">{{ profile.city|default:"Not specified" }}</span>
+          </div>
+          <div class="ds-info-item">
+            <span class="ds-info-label">State</span>
+            <span class="ds-info-value" id="displayState">{{ profile.state|default:"Not specified" }}</span>
+          </div>
+          <div class="ds-info-item">
+            <span class="ds-info-label">Pincode</span>
+            <span class="ds-info-value" id="displayPincode">{{ profile.pincode|default:"Not specified" }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Button -->
+      <button class="ds-edit-toggle-btn" id="editBtn">
+        <svg class="ds-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit Profile
+      </button>
+    </div>
+
+    <!-- Edit Mode (Hidden by Default) -->
+    <div class="ds-edit-mode" id="editMode">
+      <form class="ds-profile-form" id="profileForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Profile Picture Upload -->
+        <div class="ds-form-section">
+          <label class="ds-form-label">Profile Picture</label>
+          <div class="ds-upload-preview">
+            {% if profile.profile_picture %}
+              <img src="{{ profile.profile_picture.url }}" 
+                   alt="Profile Preview" 
+                   class="ds-preview-img" 
+                   id="previewImg">
+            {% else %}
+              <img src="https://raw.githubusercontent.com/ZippoAI/DripSpace-Design/main/assets/images/avatar.png" 
+                   alt="Profile Preview" 
+                   class="ds-preview-img" 
+                   id="previewImg">
+            {% endif %}
+            <input type="file" 
+                   class="ds-file-input" 
+                   id="fileInput" 
+                   name="profile_picture"
+                   accept="image/*">
+            <label for="fileInput" class="ds-upload-btn">
+              <svg class="ds-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Change Photo
+            </label>
+          </div>
+        </div>
+
+        <!-- Form Grid -->
+        <div class="ds-form-grid">
+          <!-- Full Name -->
+          <div class="ds-form-group ds-form-full">
+            <label class="ds-form-label" for="fullName">Full Name *</label>
+            <input type="text" 
+                   class="ds-form-input" 
+                   id="fullName" 
+                   name="full_name"
+                   value="{{ profile.full_name|default:profile.user.username }}" 
+                   required>
+          </div>
+
+          <!-- Gender -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="gender">Gender *</label>
+            <select class="ds-form-select" id="gender" name="gender" required>
+              <option value="">Select Gender</option>
+              {% for key, value in profile.GENDER_CHOICES_DICT.items %}
+                <option value="{{ key }}" {% if profile.gender == key %}selected{% endif %}>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="phoneNo">Phone Number *</label>
+            <input type="tel" 
+                   class="ds-form-input" 
+                   id="phoneNo" 
+                   name="phone_no"
+                   value="{{ profile.user.phone_no|default:"" }}" 
+                   pattern="[+]?[0-9\s]{10,15}"
+                   required>
+            <span class="ds-form-hint">Format: +91 XXXXX XXXXX</span>
+          </div>
+
+          <!-- Size -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="size">Preferred Size *</label>
+            <select class="ds-form-select" id="size" name="size" required>
+              <option value="">Select Size</option>
+              {% for key, value in profile.SIZE_CHOICES_DICT.items %}
+                <option value="{{ key }}" {% if profile.size == key %}selected{% endif %}>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div class="ds-form-group ds-form-full">
+            <label class="ds-form-label" for="address">Address *</label>
+            <input type="text" 
+                   class="ds-form-input" 
+                   id="address" 
+                   name="address"
+                   value="{{ profile.address|default:"" }}" 
+                   required>
+          </div>
+
+          <!-- City -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="city">City *</label>
+            <input type="text" 
+                   class="ds-form-input" 
+                   id="city" 
+                   name="city"
+                   value="{{ profile.city|default:"" }}" 
+                   required>
+          </div>
+
+          <!-- State -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="state">State *</label>
+            <input type="text" 
+                   class="ds-form-input" 
+                   id="state" 
+                   name="state"
+                   value="{{ profile.state|default:"" }}" 
+                   required>
+          </div>
+
+          <!-- Pincode -->
+          <div class="ds-form-group">
+            <label class="ds-form-label" for="pincode">Pincode *</label>
+            <input type="text" 
+                   class="ds-form-input" 
+                   id="pincode" 
+                   name="pincode"
+                   value="{{ profile.pincode|default:"" }}" 
+                   pattern="[0-9]{6}"
+                   maxlength="6"
+                   required>
+            <span class="ds-form-hint">6-digit pincode</span>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="ds-form-actions">
+          <button type="button" class="ds-cancel-btn" id="cancelBtn">Cancel</button>
+          <button type="submit" class="ds-save-profile-btn" id="saveBtn">
+            <svg class="ds-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div class="ds-success-message" id="successMessage">
+    <svg class="ds-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    Profile updated successfully
+  </div>
+</div>
+
+<style>
+/* ===================================
+   DripSpace Profile Page Styles
+   Premium Fashion Platform UI
+   =================================== */
+
+/* Use more specific selectors to avoid conflicts */
+.ds-profile-root * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ds-profile-root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+.ds-profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: contain;        /* shows the full image */
+    background-color: #ffffff;  /* keeps it clean behind transparent areas */
+    padding: 10px;              /* prevents touching edges */
+    border: 2px solid #e5e5e5;  /* subtle ring */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+
+
+/* ===== Header Section ===== */
+.ds-profile-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.ds-profile-title {
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.ds-profile-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+  letter-spacing: 0.3px;
+}
+
+/* ===== Profile Card ===== */
+.ds-profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 
+              0 10px 40px rgba(0, 0, 0, 0.03);
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== View Mode ===== */
+.ds-view-mode {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+.ds-edit-mode {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.ds-edit-mode.active {
+  display: block;
+}
+
+.ds-view-mode.hidden {
+  display: none;
+}
+
+/* ===== Profile Picture Display ===== */
+.ds-profile-pic-container {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 40px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.ds-profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ds-pic-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(220, 38, 38, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ds-profile-pic-container:hover .ds-pic-overlay {
+  opacity: 1;
+}
+
+.ds-camera-icon {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+}
+
+/* ===== User Info Grid ===== */
+.ds-user-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.ds-info-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ds-info-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ds-info-row.ds-info-full {
+  grid-template-columns: 1fr;
+}
+
+.ds-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-info-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9ca3af;
+}
+
+.ds-info-value {
+  font-size: 16px;
+  font-weight: 400;
+  color: #1f2937;
+  letter-spacing: -0.2px;
+}
+
+/* ===== Edit Toggle Button ===== */
+.ds-edit-toggle-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.ds-edit-toggle-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.ds-btn-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Edit Mode / Form ===== */
+.ds-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ds-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== Upload Preview ===== */
+.ds-upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ds-preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f3f4f6;
+}
+
+.ds-file-input {
+  display: none;
+}
+
+.ds-upload-btn {
+  padding: 12px 24px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.ds-upload-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.ds-upload-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== Form Grid ===== */
+.ds-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  /* Ensure grid is visible */
+  visibility: visible;
+}
+
+.ds-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  /* Ensure groups are visible */
+  visibility: visible;
+  /* Debug: Add temporary border to see if elements exist */
+  /* border: 1px dashed blue !important; */
+}
+
+.ds-form-group.ds-form-full {
+  grid-column: 1 / -1;
+}
+
+.ds-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #374151;
+  /* Ensure labels are visible */
+  display: block;
+}
+
+.ds-form-input,
+.ds-form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1f2937;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  min-height: 46px;
+  /* Ensure inputs are visible and interactive */
+  display: block;
+  appearance: none;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.ds-form-input:focus,
+.ds-form-select:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  z-index: 2;
+}
+
+.ds-form-input::placeholder {
+  color: #9ca3af;
+}
+
+.ds-form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* Ensure form fields are visible even when empty */
+.ds-form-input:placeholder-shown {
+  color: #9ca3af;
+}
+
+/* Fix for telephone input on mobile */
+.ds-form-input[type="tel"] {
+  font-family: monospace;
+}
+
+/* Ensure form groups maintain their structure */
+.ds-form-group > * {
+  width: 100%;
+}
+
+.ds-form-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ===== Form Actions ===== */
+.ds-form-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.ds-cancel-btn {
+  flex: 1;
+  padding: 16px 24px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ds-cancel-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.ds-save-profile-btn {
+  flex: 1;
+  padding: 16px 24px;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.ds-save-profile-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+/* ===== Success Message ===== */
+.ds-success-message {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: #10b981;
+  color: #ffffff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 1000;
+}
+
+.ds-success-message.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ds-success-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .ds-profile-root {
+    padding: 24px 16px;
+  }
+
+  .ds-profile-title {
+    font-size: 28px;
+  }
+
+  .ds-profile-card {
+    padding: 32px 24px;
+  }
+
+  .ds-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-upload-preview {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ds-form-actions {
+    flex-direction: column;
+  }
+
+  .ds-info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-success-message {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ds-profile-title {
+    font-size: 24px;
+  }
+
+  .ds-profile-card {
+    padding: 24px 16px;
+  }
+
+  .ds-profile-pic-container {
+    width: 100px;
+    height: 100px;
+  }
+}
+</style>
+
+<script>
+// ===================================
+// DripSpace Profile Management
+// Enterprise-Grade JavaScript
+// ===================================
+
+(function() {
+  'use strict';
+
+  // ===== DOM Elements =====
+  const viewMode = document.getElementById('viewMode');
+  const editMode = document.getElementById('editMode');
+  const editBtn = document.getElementById('editBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const profileForm = document.getElementById('profileForm');
+  const successMessage = document.getElementById('successMessage');
+  const fileInput = document.getElementById('fileInput');
+  const previewImg = document.getElementById('previewImg');
+  const displayPicture = document.getElementById('displayPicture');
+
+  // Display elements
+  const displayName = document.getElementById('displayName');
+  const displayGender = document.getElementById('displayGender');
+  const displayPhone = document.getElementById('displayPhone');
+  const displaySize = document.getElementById('displaySize');
+  const displayAddress = document.getElementById('displayAddress');
+  const displayCity = document.getElementById('displayCity');
+  const displayState = document.getElementById('displayState');
+  const displayPincode = document.getElementById('displayPincode');
+
+  // Form inputs
+  const fullNameInput = document.getElementById('fullName');
+  const genderInput = document.getElementById('gender');
+  const phoneNoInput = document.getElementById('phoneNo');
+  const sizeInput = document.getElementById('size');
+  const addressInput = document.getElementById('address');
+  const cityInput = document.getElementById('city');
+  const stateInput = document.getElementById('state');
+  const pincodeInput = document.getElementById('pincode');
+
+  // Debug: Log elements to console
+  console.log('DOM Elements:', {
+    viewMode,
+    editMode,
+    editBtn,
+    cancelBtn,
+    profileForm,
+    fullNameInput,
+    genderInput,
+    phoneNoInput,
+    sizeInput,
+    addressInput,
+    cityInput,
+    stateInput,
+    pincodeInput
+  });
+
+  // ===== State Management =====
+  let currentProfilePic = displayPicture.src;
+
+  // ===== Toggle Edit Mode =====
+  function showEditMode() {
+    viewMode.classList.add('hidden');
+    editMode.classList.add('active');
+  }
+
+  function showViewMode() {
+    editMode.classList.remove('active');
+    viewMode.classList.remove('hidden');
+  }
+
+  // ===== Image Upload Handler =====
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should not exceed 5MB');
+        return;
+      }
+
+      // Preview image
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        previewImg.src = event.target.result;
+        currentProfilePic = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // ===== Form Validation =====
+  function validatePhone(phone) {
+    // Remove spaces and check if it's a valid format
+    const cleaned = phone.replace(/\s+/g, '');
+    return /^[+]?[0-9]{10,15}$/.test(cleaned);
+  }
+
+  function validatePincode(pincode) {
+    return /^[0-9]{6}$/.test(pincode);
+  }
+
+  // ===== Real-time Validation =====
+  phoneNoInput.addEventListener('blur', function() {
+    if (this.value && !validatePhone(this.value)) {
+      this.style.borderColor = '#ef4444';
+    } else {
+      this.style.borderColor = '#e5e7eb';
+    }
+  });
+
+  pincodeInput.addEventListener('input', function() {
+    // Only allow numbers
+    this.value = this.value.replace(/[^0-9]/g, '');
+    
+    if (this.value && !validatePincode(this.value)) {
+      this.style.borderColor = '#ef4444';
+    } else {
+      this.style.borderColor = '#e5e7eb';
+    }
+  });
+
+  // ===== Show Success Message =====
+  function showSuccessMessage() {
+    successMessage.classList.add('show');
+    
+    setTimeout(() => {
+      successMessage.classList.remove('show');
+    }, 3000);
+  }
+
+  // ===== Update Display Values =====
+  function updateDisplayValues() {
+    displayName.textContent = fullNameInput.value;
+    displayGender.textContent = genderInput.value;
+    displayPhone.textContent = phoneNoInput.value;
+    displaySize.textContent = sizeInput.value;
+    displayAddress.textContent = addressInput.value;
+    displayCity.textContent = cityInput.value;
+    displayState.textContent = stateInput.value;
+    displayPincode.textContent = pincodeInput.value;
+    displayPicture.src = currentProfilePic;
+  }
+
+  // ===== Event Listeners =====
+  editBtn.addEventListener('click', function() {
+    showEditMode();
+    smoothScrollToTop();
+  });
+
+  cancelBtn.addEventListener('click', function() {
+    // Reset form to current display values
+    fullNameInput.value = displayName.textContent;
+    genderInput.value = displayGender.textContent;
+    phoneNoInput.value = displayPhone.textContent;
+    sizeInput.value = displaySize.textContent;
+    addressInput.value = displayAddress.textContent;
+    cityInput.value = displayCity.textContent;
+    stateInput.value = displayState.textContent;
+    pincodeInput.value = displayPincode.textContent;
+    previewImg.src = displayPicture.src;
+    currentProfilePic = displayPicture.src;
+    
+    // Reset validation styles
+    phoneNoInput.style.borderColor = '#e5e7eb';
+    pincodeInput.style.borderColor = '#e5e7eb';
+    
+    showViewMode();
+    smoothScrollToTop();
+  });
+
+  // Remove the form submit handler since we're using Django form submission
+  // The form will be submitted to the server and handle the redirect
+  
+  // Add debugging to see if form submission is working
+  profileForm.addEventListener('submit', function(e) {
+    console.log('Form is being submitted');
+    // Let the form submit normally to Django
+  });
+
+  // ===== Smooth Scroll to Top on Mode Change =====
+  function smoothScrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+})();
+</script>
+
+{% endblock content %}

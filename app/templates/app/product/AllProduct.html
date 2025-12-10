@@ -1,0 +1,723 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}All Products | DripSpace - Premium Fashion Collection{% endblock %}
+
+{% block meta_description %}Browse our complete collection of premium fashion products at DripSpace. Find the latest trends in clothing, accessories, and more.{% endblock %}
+
+{% block meta_keywords %}fashion, clothing, premium, collection, products, drip space{% endblock %}
+
+{% block og_title %}{{ block.super }}{% endblock %}
+
+{% block og_description %}{{ block.super }}{% endblock %}
+
+{% block twitter_title %}{{ block.super }}{% endblock %}
+
+{% block twitter_description %}{{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- DripSpace All Products Section -->
+<div class="dripspace-products-section">
+  <!-- Section Header -->
+  <div class="section-header">
+    <h1 class="section-title">All Products</h1>
+    <p class="section-subtitle">Elevate your style with DripSpace essentials</p>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="product-grid-row">
+    {% for product in products %}
+    <!-- Product Card -->
+    <div class="dripspace-product-card" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}" data-product-category="{{ product.category }}" data-product-price="{{ product.price }}" data-product-description="{{ product.description|default:'Premium quality product from DripSpace collection.' }}">
+      <!-- Discount Badge -->
+      {% if product.discount %}
+      <div class="discount-badge">-{{ product.discount }}%</div>
+      {% endif %}
+      
+      <!-- Wishlist Heart Icon -->
+      <button class="wishlist-btn" data-product-id="{{ product.id }}">
+        <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </button>
+      
+      <div class="product-image-container">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+        <div class="product-overlay">
+          <a href="{% url 'productDetail' product.slug %}" class="view-details-btn">View Details</a>
+        </div>
+      </div>
+      
+      <div class="product-info-block">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="price-container">
+          <p class="product-price">₹{{ product.price }}</p>
+          {% if product.original_price %}
+          <p class="original-price">₹{{ product.original_price }}</p>
+          {% endif %}
+        </div>
+        
+        <!-- Color Options -->
+        {% if product.colors %}
+        <div class="color-options">
+          {% for color in product.colors %}
+          <span class="color-dot" style="background-color: {{ color }};"></span>
+          {% endfor %}
+          <span class="color-count">+{{ product.color_count }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Product Modal Popup -->
+<div class="product-modal-popup" id="productModal" style="display: none;">
+  <div class="modal-content-wrapper">
+    <button class="modal-close-btn" id="closeModal">&times;</button>
+    <div class="modal-layout">
+      <div class="modal-image-section">
+        <img src="" alt="" id="modalImage" class="modal-product-image">
+      </div>
+      <div class="modal-details-section">
+        <p class="modal-category" id="modalCategory"></p>
+        <h2 class="modal-product-name" id="modalName"></h2>
+        <p class="modal-product-description" id="modalDescription"></p>
+        <p class="modal-product-price" id="modalPrice"></p>
+        <div class="modal-action-buttons">
+          <button class="modal-add-cart-btn" id="modalAddToCart">Add to Cart</button>
+          <button class="modal-buy-now-btn" id="modalBuyNow">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ==================== Global Styles ==================== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .dripspace-products-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    background-color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  /* ==================== Section Header ==================== */
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-title {
+    font-size: 48px;
+    font-weight: 200;
+    color: #1a1a1a;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: #666666;
+    letter-spacing: 1px;
+  }
+
+  /* ==================== Product Grid ==================== */
+  .product-grid-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    width: 100%;
+  }
+
+  /* ==================== Product Card ==================== */
+  .dripspace-product-card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .dripspace-product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  /* ==================== Discount Badge ==================== */
+  .discount-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #e63946;
+    color: #ffffff;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    z-index: 2;
+    letter-spacing: 0.5px;
+  }
+
+  /* ==================== Wishlist Heart Button ==================== */
+  .wishlist-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .wishlist-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .heart-icon {
+    width: 20px;
+    height: 20px;
+    color: #1a1a1a;
+    transition: all 0.3s ease;
+  }
+
+  .wishlist-btn:hover .heart-icon {
+    color: #e63946;
+    fill: #e63946;
+  }
+
+  .wishlist-btn.active .heart-icon {
+    color: #e63946;
+    fill: #e63946;
+  }
+
+  /* ==================== Product Image ==================== */
+  .product-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 125%; /* 4:5 aspect ratio */
+    overflow: hidden;
+  }
+
+  .product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .dripspace-product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  .product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .dripspace-product-card:hover .product-overlay {
+    opacity: 1;
+  }
+
+  .view-details-btn {
+    background: #ffffff;
+    color: #1a1a1a;
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .dripspace-product-card:hover .view-details-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .view-details-btn:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+
+  /* ==================== Product Info ==================== */
+  .product-info-block {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  .product-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .original-price {
+    font-size: 14px;
+    color: #999999;
+    text-decoration: line-through;
+  }
+
+  /* ==================== Color Options ==================== */
+  .color-options {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  .color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+  }
+
+  .color-count {
+    font-size: 12px;
+    color: #999999;
+  }
+
+  /* ==================== Modal Styles ==================== */
+  .product-modal-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .product-modal-popup.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-content-wrapper {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+  }
+
+  .product-modal-popup.active .modal-content-wrapper {
+    transform: translateY(0);
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 10001;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+  }
+
+  .modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .modal-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 500px;
+  }
+
+  .modal-image-section {
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .modal-product-image {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+  }
+
+  .modal-details-section {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .modal-category {
+    font-size: 14px;
+    color: #999999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .modal-product-name {
+    font-size: 28px;
+    font-weight: 300;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    line-height: 1.3;
+  }
+
+  .modal-product-description {
+    font-size: 15px;
+    color: #666666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  .modal-product-price {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 30px;
+  }
+
+  .modal-action-buttons {
+    display: flex;
+    gap: 15px;
+  }
+
+  .modal-add-cart-btn,
+  .modal-buy-now-btn {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .modal-add-cart-btn {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+
+  .modal-add-cart-btn:hover {
+    background: #333333;
+  }
+
+  .modal-buy-now-btn {
+    background: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .modal-buy-now-btn:hover {
+    background: #f5f5f5;
+  }
+
+  /* ==================== Responsive Design ==================== */
+  @media (max-width: 1024px) {
+    .product-grid-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .section-title {
+      font-size: 40px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dripspace-products-section {
+      padding: 60px 20px;
+    }
+    
+    .product-grid-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .section-header {
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      font-size: 32px;
+    }
+    
+    .modal-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .modal-image-section {
+      padding: 20px;
+    }
+    
+    .modal-details-section {
+      padding: 30px 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-grid-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+      font-size: 28px;
+    }
+    
+    .modal-action-buttons {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  // ==================== Product Data ====================
+  const productData = {
+    {% for product in products %}
+    '{{ product.id }}': {
+      id: '{{ product.id }}',
+      name: '{{ product.name|escapejs }}',
+      category: '{{ product.category|escapejs }}',
+      price: '{{ product.price|escapejs }}',
+      originalPrice: '{{ product.original_price|default:""|escapejs }}',
+      description: '{{ product.description|default:"Premium quality product from DripSpace collection."|escapejs }}',
+      image: '{{ product.image.url|escapejs }}',
+      colors: [{% for color in product.colors %}'{{ color|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+      discount: '{{ product.discount|default:"0"|escapejs }}'
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  };
+
+  // ==================== Modal Functions ====================
+  const modal = document.getElementById('productModal');
+  const closeBtn = document.getElementById('closeModal');
+  const productCards = document.querySelectorAll('.dripspace-product-card');
+  let currentProductId = null;
+
+  // Open modal function
+  function openModal(card) {
+    const productId = card.getAttribute('data-product-id');
+    const productName = card.getAttribute('data-product-name');
+    const productCategory = card.getAttribute('data-product-category');
+    const productPrice = card.getAttribute('data-product-price');
+    const productDescription = card.getAttribute('data-product-description');
+    const productImage = card.querySelector('.product-image').src;
+    
+    currentProductId = productId;
+    
+    document.getElementById('modalImage').src = productImage;
+    document.getElementById('modalImage').alt = productName;
+    document.getElementById('modalCategory').textContent = productCategory;
+    document.getElementById('modalName').textContent = productName;
+    document.getElementById('modalDescription').textContent = productDescription;
+    document.getElementById('modalPrice').textContent = `Rs. ${productPrice}`;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Close modal function
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Event listeners for product cards
+  productCards.forEach(card => {
+    card.addEventListener('click', function(e) {
+      // Don't open modal if clicking on wishlist button
+      if (!e.target.closest('.wishlist-btn')) {
+        openModal(this);
+      }
+    });
+  });
+
+  // Close modal when clicking close button
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close modal when clicking outside content
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // ==================== Wishlist Functionality ====================
+  const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+  
+  wishlistButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('active');
+      
+      const productId = this.getAttribute('data-product-id');
+      const isActive = this.classList.contains('active');
+      
+      // Here you would typically make an AJAX call to update the wishlist
+      console.log(`Product ${productId} ${isActive ? 'added to' : 'removed from'} wishlist`);
+      
+      // Show visual feedback
+      const feedback = document.createElement('div');
+      feedback.textContent = isActive ? 'Added to wishlist' : 'Removed from wishlist';
+      feedback.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #1a1a1a;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 10000;
+        animation: fadeInOut 3s ease;
+      `;
+      
+      document.body.appendChild(feedback);
+      
+      setTimeout(() => {
+        if (feedback.parentNode) {
+          feedback.parentNode.removeChild(feedback);
+        }
+      }, 3000);
+    });
+  });
+
+  // ==================== Add to Cart Functionality ====================
+  document.getElementById('modalAddToCart').addEventListener('click', function() {
+    if (currentProductId) {
+      // Here you would typically make an AJAX call to add to cart
+      console.log(`Adding product ${currentProductId} to cart`);
+      
+      // Show confirmation
+      const confirmation = document.createElement('div');
+      confirmation.textContent = 'Product added to cart';
+      confirmation.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 10000;
+        animation: fadeInOut 3s ease;
+      `;
+      
+      document.body.appendChild(confirmation);
+      
+      setTimeout(() => {
+        if (confirmation.parentNode) {
+          confirmation.parentNode.removeChild(confirmation);
+        }
+      }, 3000);
+      
+      closeModal();
+    }
+  });
+
+  // ==================== Buy Now Functionality ====================
+  document.getElementById('modalBuyNow').addEventListener('click', function() {
+    if (currentProductId) {
+      // Redirect to product detail page or checkout
+      window.location.href = `/product/${currentProductId}/`;
+    }
+  });
+
+  // ==================== Animations ====================
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-20px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+{% endblock %}

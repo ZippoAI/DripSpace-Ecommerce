@@ -1,0 +1,2290 @@
+{% extends "app/includes/base.html" %}
+
+{% block title %}Premium Fashion & Luxury Clothing | DripSpace{% endblock %}
+
+{% block meta_description %}Discover premium fashion and luxury clothing at DripSpace. Shop the latest collections of minimalist designs, sustainable materials, and timeless style for the modern wardrobe.{% endblock %}
+
+{% block meta_keywords %}premium fashion, luxury clothing, minimalist fashion, sustainable fashion, drip space, modern wardrobe{% endblock %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        .body {
+            font-family: "Outfit", sans-serif;
+            overflow-x: hidden;
+        }
+
+        #main {
+            min-height: 100vh;
+            width: 100%;
+            padding: 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dripspace-hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 60px 80px;
+            background-color: #f5f5f5;
+        }
+
+        .dripspace-hero-image-section {
+            flex: 0 0 35%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dripspace-hero-model-image {
+            width: 100%;
+            max-width: 450px;
+            height: 650px;
+            object-fit: contain;
+            opacity: 0;
+            transform: translateX(-60px);
+            animation: dripspace-slideInLeft 1.2s ease-out forwards;
+        }
+
+        @keyframes dripspace-slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .dripspace-hero-content-section {
+            flex: 0 0 60%;
+            padding-left: 60px 0;
+            max-width: 1024px;
+        }
+
+        .dripspace-hero-brand-name {
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: #999;
+            margin-bottom: 20px;
+            font-weight: 400;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: dripspace-fadeInDown 0.8s ease-out 0.3s forwards;
+        }
+
+        @keyframes dripspace-fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dripspace-hero-brand-name-char {
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .dripspace-hero-brand-name-char.dripspace-animated {
+            animation: dripspace-charFadeIn 0.5s ease-out forwards;
+        }
+
+        .dripspace-hero-brand-name-char:hover {
+            opacity: 0.9 !important;
+        }
+
+        @keyframes dripspace-charFadeIn {
+            to {
+                opacity: 0.7;
+            }
+        }
+
+        .dripspace-hero-main-heading {
+            font-size: clamp(4rem , 7.4rem , 7.4vw);
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 30px;
+            width: 100%;
+            letter-spacing: -1px;
+            line-height: clamp(3.4rem, 8rem, 10vw);
+        }
+
+        .dripspace-hero-main-heading-char {
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .dripspace-hero-main-heading-char.dripspace-animated {
+            animation: dripspace-charFadeIn 0.5s ease-out forwards;
+        }
+
+        .dripspace-hero-main-heading-char:hover {
+            opacity: 0.9 !important;
+            color: #B80000;
+        }
+
+        .dripspace-hero-subheading {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 50px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .dripspace-hero-subheading-char {
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .dripspace-hero-subheading-char.dripspace-animated {
+            animation: dripspace-charFadeIn 0.5s ease-out forwards;
+        }
+
+        .dripspace-hero-subheading-char:hover {
+            opacity: 0.9 !important;
+            color: #B80000;
+
+        }
+
+        .dripspace-hero-cta-button {
+            display: inline-block;
+            padding: 18px 45px;
+            background-color: transparent;
+            border: 2px solid #2d2d2d;
+            color: #2d2d2d;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: dripspace-fadeInUp 0.8s ease-out 1.2s forwards;
+        }
+
+        @keyframes dripspace-fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dripspace-hero-cta-button:hover {
+            background-color: #B80000;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 45, 45, 0.15);
+            border: none;
+        }
+
+        @media (max-width: 1024px) {
+            .dripspace-hero-container {
+                flex-direction: column;
+                padding: 40px;
+                text-align: center;
+            }
+
+            .dripspace-hero-image-section {
+                flex: 0 0 auto;
+                margin-bottom: 40px;
+            }
+
+            .dripspace-hero-content-section {
+                flex: 0 0 auto;
+                padding-left: 0;
+            }
+
+            .dripspace-hero-main-heading {
+                font-size: 56px;
+            }
+
+            .dripspace-hero-subheading {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dripspace-hero-container {
+                padding: 20vw 20px;
+                flex-direction: column-reverse;
+            }
+
+            .dripspace-hero-main-heading {
+                font-size: 52px;
+            }
+
+            .dripspace-hero-subheading {
+                font-size: 18px;
+            }
+
+            .dripspace-hero-cta-button {
+                padding: 15px 35px;
+                font-size: 14px;
+            }
+
+            .dripspace-hero-model-image {
+                width: 100%;
+                max-width: 450px;
+                height: 450px;
+            }
+        }
+
+        /* Page 3 */
+        .page3 {
+            min-height: 100vh;
+            width: 100%;
+            background: #fff;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .page3-images {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .page3-image {
+            flex: 1;
+            min-width: 300px;
+            min-height: 600px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        .page3-image:nth-child(1) {
+            background-image: url(https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2027.png);
+        }
+
+        .page3-image:nth-child(2) {
+            background-image: url(https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2029.png);
+        }
+
+        .page3-image:nth-child(3) {
+            background-image: url(https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2031.png);
+        }
+
+        .page3-box {
+            position: absolute;
+            top: 30%;
+            left: 15%;
+            width: 70%;
+            background-color: rgba(23, 23, 23, 0.311);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .hover-section {
+            background-color: #ffffff;
+            cursor: pointer;
+            overflow: hidden;
+            margin-bottom: 8px;
+            border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        .section-header span:first-child {
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .section-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0c0c0c;
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            transition: color 0.3s ease;
+        }
+
+        .section-header span:last-child {
+            color: #000000;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .hover-section:hover .section-header span:last-child {
+            transform: translateX(8px);
+        }
+
+        .section-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+        }
+
+        .hover-section:hover .section-content {
+            max-height: 250px;
+            opacity: 1;
+        }
+
+        .content-inner {
+            padding: 1.5rem;
+        }
+
+        .section-content p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #B80000;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .btn-secondary:hover {
+            background-color: #B80000;
+            color: #ffffff;
+            border: none;
+        }
+
+        /* categories ----> */
+        .categories {
+            min-height: 100vh;
+            width: 100%;
+            padding: 4rem 1.2rem;
+            background: #F9F9F9;
+        }
+
+        .categories h1 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .category-card {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.2rem;
+            justify-items: center;
+        }
+
+        .category-card-item-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: fit-content;
+        }
+
+        .category-card-item{
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .category-card-item h2 {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-top: 0.8rem;
+            text-align: center;
+        }
+
+        .category-card-item-hover{
+            height: 80%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .category-card-item img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+
+        }
+
+        .category-card-item:hover img{
+            transform: scale(1.1) rotate(2deg);
+        }
+        
+        /* Arrivals Section */
+        .arrivals {
+            min-height: 70vh;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .arrivals-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .arrivals h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            letter-spacing: 2px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .arrivals h1.arrivals-h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: #ffffff;
+        }
+
+        .slider-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .slider-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ffffff;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .slider-btn:hover {
+            background: #fff;
+            color: #111;
+            transform: scale(1.1);
+        }
+
+        .arrival-container {
+            position: relative;
+            overflow: hidden;
+            padding: 1rem 0;
+            /* Enable touch scrolling */
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+
+        .arrival-container:active {
+            cursor: grabbing;
+        }
+
+        .arrival-track {
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Prevent text selection during swipe */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .arrival-items-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: fit-content;
+        }
+
+        .arrival-items-link:focus {
+            outline: none;
+        }
+
+        .arrival-items {
+            min-width: 320px;
+            height: 450px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            /* Prevent tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .image-scale {
+            height: 75%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .arrival-items img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .arrival-items:hover img {
+            transform: scale(1.06);
+        }
+
+        .arrival-info {
+            padding: 1.5rem;
+            background: #fff;
+        }
+
+        .arrival-items h2 {
+            font-size: 1.2rem;
+            color: #262626;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .arrival-items h4 {
+            font-size: 0.8rem;
+            color: #212121;
+            font-weight: 600;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #fff;
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        .arrivals-bottom-texts {
+            text-align: center;
+            margin-top: 3rem;
+            color: #fff;
+        }
+
+        .arrivals-bottom-texts h1 {
+            text-transform: uppercase;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* Grid Section */
+        .section-grid {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 500px 1fr;
+            grid-template-rows: repeat(2, 400px);
+            grid-template-areas: 
+                'left right'
+                'bottom right';
+            gap: 0.8rem;
+            padding: 1.8rem;
+        }
+
+        .grid-column {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+        }
+
+        .image-content {
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        .image-content h1 {
+            color: #2b2b2b;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .image-content1 img {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .image-content2 {
+            padding: 1.2rem;
+        }
+
+        .image-content3 img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 80%;
+            width: 80%;
+            object-fit: cover;
+        }
+
+        .grid-column:nth-child(1) {
+            background: linear-gradient(to bottom, #ffe9e9, #fdf1ee, #fffdfd);
+            grid-area: left;
+            padding: 1.2rem;
+        }
+
+        .grid-column:nth-child(2) {
+            background: linear-gradient(to bottom, #d9f8fe, #eaf6fe, #f8fafc);
+            grid-area: right;
+        }
+
+        .grid-column:nth-child(2) video {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .grid-column:nth-child(3) {
+            background: linear-gradient(to bottom, #a4d9ff, #b9e2ff, #f2faff);
+            grid-area: bottom;
+            padding: 1.2rem;
+        }
+
+        /* Jackets Section */
+        .jackets {
+            min-height: 100vh;
+            width: 100%;
+            padding: 4rem 1.8rem;
+            background: #F9F9F9;
+        }
+
+        .jackets h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .jacket-items {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            justify-items: center;
+        }
+
+        .jacket-item-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: fit-content;
+        }
+
+        .jacket-item-link:focus {
+            outline: none;
+        }
+
+        .jacket-item {
+            width: 100%;
+            max-width: 250px;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .jacket-item:hover {
+            transform: scale(1.05);
+        }
+
+        .jacket-item img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Shoes Section */
+        .shoes-slider {
+            min-height: 80vh;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shoes-slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+
+        .shoes-slider-header h1 {
+            font-size: clamp(2rem, 2.5vw, 3.5rem);
+            color: #fff;
+            letter-spacing: 4px;
+            font-weight: 300;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .shoes-slider-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: #fff;
+        }
+
+        .shoes-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .shoes-control-btn {
+            width: 55px;
+            height: 55px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .shoes-control-btn:hover {
+            background: #fff;
+            color: #1a1a1a;
+            transform: scale(1.1);
+        }
+
+        .shoes-slider-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+            /* Enable touch scrolling */
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+
+        .shoes-slider-container:active {
+            cursor: grabbing;
+        }
+
+        .shoes-track {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0 1rem;
+            /* Prevent text selection during swipe */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .shoes-item-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: fit-content;
+        }
+
+        .shoes-item-link:focus {
+            outline: none;
+        }
+
+        .shoes-item {
+            min-width: 300px;
+            width: 320px;
+            height: 450px;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            /* Prevent tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .shoes-item:hover {
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .shoes-image-wrapper {
+            height: 70%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+        }
+
+        .shoes-item img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .shoes-item:hover img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .shoes-info {
+            padding: 1.8rem;
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shoes-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .shoes-item h2 {
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            font-weight: 400;
+            margin-bottom: 0.4rem;
+        }
+
+        .shoes-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .shoes-item h4 {
+            font-size: 1rem;
+            color: #000;
+            font-weight: 300;
+        }
+
+        /* Page 6 */
+        .page6 {
+            min-height: 60vh;
+            padding: 6rem 2rem;
+            background: #fff;
+        }
+        
+        .page6 h2 {
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #000;
+        }
+
+        .page6 p {
+            font-weight: 300;
+            line-height: 1.8rem;
+            margin-top: 1.2rem;
+            color: #2e2e2e;
+            font-size: 1rem;
+        }
+
+        .page6 span a {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .page6 span a:hover {
+            color: #666;
+        }
+
+        /* Mobile swipe enhancements */
+        @media (max-width: 768px) {
+            .arrivals .slider-controls,
+            .shoes-slider .shoes-controls {
+                display: none; /* Hide arrow buttons on mobile */
+            }
+
+            .arrival-container,
+            .shoes-slider-container {
+                overflow-x: auto; /* Enable horizontal scroll on mobile */
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE/Edge */
+            }
+
+            .arrival-container::-webkit-scrollbar,
+            .shoes-slider-container::-webkit-scrollbar {
+                display: none; /* Chrome/Safari/Opera */
+            }
+
+            .arrival-track,
+            .shoes-track {
+                /* Remove transition for native scroll on mobile */
+                transition: none;
+                /* Allow native scrolling */
+                transform: none !important;
+            }
+        }
+
+        /* Mobile fixes for page3 section */
+        @media (max-width: 1024px) {
+            .page3-images {
+                flex-direction: column;
+            }
+
+            .page3-image {
+                min-height: 500px;
+            }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(3, 400px);
+                grid-template-areas: 
+                    'left'
+                    'bottom'
+                    'right';
+            }
+
+            .jacket-items {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Page3 mobile fix */
+            .page3 {
+                padding: 2rem 1rem !important;
+            }
+            
+            .page3-image {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+                min-height: 400px !important;
+                margin-bottom: 1rem;
+            }
+            
+            .page3-box {
+                width: 85% !important;
+                left: 7.5% !important;
+                top: 20% !important;
+            }
+
+            .arrivals {
+                padding: 2rem 1rem;
+            }
+
+            .arrivals h1 {
+                font-size: 1.8rem;
+            }
+
+            .arrival-items {
+                min-width: 280px;
+                height: 400px;
+            }
+
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .jacket-items {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 0.8rem;
+            }
+
+            .jacket-item {
+                max-width: 200px;
+            }
+
+            .section-grid {
+                grid-template-rows: repeat(3, 350px);
+                padding: 1rem;
+            }
+
+            .shoes-slider {
+                padding: 3rem 1rem;
+            }
+
+            .shoes-slider-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+                margin-bottom: 2rem;
+            }
+
+            .shoes-slider-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .shoes-controls {
+                align-self: flex-end;
+            }
+
+            .shoes-control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .shoes-item {
+                min-width: 280px;
+                width: 280px;
+                height: 420px;
+            }
+
+            .shoes-slider-container {
+                padding: 1rem 0;
+            }
+
+            .shoes-track {
+                gap: 1.5rem;
+                padding: 0 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Page3 mobile fix for small screens */
+            .page3-image {
+                min-height: 350px !important;
+            }
+            
+            .page3-box {
+                width: 90% !important;
+                left: 5% !important;
+                top: 15% !important;
+            }
+
+            .arrival-items {
+                min-width: 250px;
+                height: 380px;
+            }
+
+            .arrivals-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .jacket-items {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+
+            .jacket-item {
+                max-width: 100%;
+            }
+
+            .shoes-slider {
+                padding: 2rem 0.5rem;
+            }
+
+            .shoes-slider-header h1 {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+
+            .shoes-control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .shoes-item {
+                min-width: 250px;
+                width: 260px;
+                height: 380px;
+            }
+
+            .shoes-info {
+                padding: 1.2rem;
+            }
+
+            .shoes-item h2 {
+                font-size: 1rem;
+            }
+
+            .shoes-category {
+                font-size: 0.65rem;
+            }
+
+            .shoes-track {
+                gap: 1rem;
+            }
+        }
+    </style>
+
+    <div class="body">
+        <main id="main">
+            <div class="dripspace-hero-container">
+                <div class="dripspace-hero-image-section">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/peter-chirkov-sWx6O6f8S3E-unsplash2.png" alt="image" class="dripspace-hero-model-image">
+                </div>
+                
+                <div class="dripspace-hero-content-section">
+                    <div class="dripspace-hero-brand-name" id="dripspace-brand-name"></div>
+                    <h1 class="dripspace-hero-main-heading" id="dripspace-main-heading"></h1>
+                    <p class="dripspace-hero-subheading" id="dripspace-subheading"></p>
+                    <a href="{% url "newArrival" %}" class="dripspace-hero-cta-button">Explore New Arrivals</a>
+                </div>
+            </div>
+        </main>
+        
+        <section class="page3">
+            <div class="page3-images">
+                <div class="page3-image">
+                    <div class="page3-box">
+                        <div class="hover-section">
+                            <div class="section-header">
+                                <span>•</span>
+                                <h3>Collections</h3>
+                                <span>→</span>
+                            </div>
+                            <div class="section-content">
+                                <div class="content-inner">
+                                    <p>Browse our latest seasonal collections featuring trending designs.</p>
+                                    <div class="button-container">
+                                        <button class="btn btn-primary">View Collection</button>
+                                        <a href="{% url "newArrival" %}"><button class="btn btn-secondary">New Arrivals</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page3-image">
+                    <div class="page3-box">
+                        <div class="hover-section">
+                            <div class="section-header">
+                                <span>•</span>
+                                <h3>Collections</h3>
+                                <span>→</span>
+                            </div>
+                            <div class="section-content">
+                                <div class="content-inner">
+                                    <p>Discover exclusive collections from top designers and emerging brands.</p>
+                                    <div class="button-container">
+                                        <button class="btn btn-primary">Shop Collection</button>
+                                        <button class="btn btn-secondary">Featured Items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page3-image">
+                    <div class="page3-box">
+                        <div class="hover-section">
+                            <div class="section-header">
+                                <span>•</span>
+                                <h3>Collections</h3>
+                                <span>→</span>
+                            </div>
+                            <div class="section-content">
+                                <div class="content-inner">
+                                    <p>Access premium collections with limited edition exclusive pieces.</p>
+                                    <div class="button-container">
+                                        <button class="btn btn-primary">Browse Now</button>
+                                        <button class="btn btn-secondary">Premium Access</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories">
+            <h1 class="categories-heading">Explore the Drip-Space all collections</h1>
+            <div class="category-card">
+                {% for head_category in head_categories %}
+                    {% for category in head_category.categories.all %}
+                    <a href="{% url 'category_products' category.slug %}" class="category-card-item-link">
+                    <div class="category-card-item">
+                        <div class="category-card-item-hover">
+                            {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                            {% else %}
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2042.png" alt="{{ category.name }}">
+                            {% endif %}
+                        </div>
+                        <h2>{{ category.name }}</h2>
+                    </div>
+                    </a>
+                    {% endfor %}
+                {% empty %}
+                <!-- Fallback static items if no categories are available -->
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                        <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2042.png" alt="">
+                    </div>
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2044.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2045.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2046.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2047.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2048.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2049.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                <a href="#" class="category-card-item-link">
+                <div class="category-card-item">
+                    <div class="category-card-item-hover">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2050.png" alt="">                        
+                    </div>
+
+                    <h2>Men Jackets</h2>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="arrivals">
+            <div class="arrivals-header">
+                <h1 class="arrivals-h1">New Arrivals</h1>
+                <div class="slider-controls">
+                    <button class="slider-btn" id="prevBtn" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="slider-btn" id="nextBtn" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="arrival-container">
+                <div class="arrival-track" id="sliderTrack">
+                    {% for product in all_products %}
+                    <a href="{% url 'productDetail' product.slug %}" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>{{ product.name }}</h2>
+                            <h4>₹{{ product.price }}</h4>
+                        </div>
+                    </div>
+                    </a>
+                    {% empty %}
+                    <!-- Fallback static items if no products are available -->
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%202.png" alt="Track Jacket">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Track Jackets</h2>
+                            <h4>$99.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%203.png" alt="Casual Wear">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Casual Wear</h2>
+                            <h4>$79.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%204.png" alt="Sports Collection">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Sports Collection</h2>
+                            <h4>$129.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%205.png" alt="Premium Jacket">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Premium Jacket</h2>
+                            <h4>$149.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%207.png" alt="Urban Style">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Urban Style</h2>
+                            <h4>$89.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy.png" alt="Classic Design">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Classic Design</h2>
+                            <h4>$99.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="arrival-items-link">
+                    <div class="arrival-items">
+                        <div class="image-scale">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image.png" alt="Classic Design">
+                        </div>
+                        <div class="arrival-info">
+                            <h2>Classic Design</h2>
+                            <h4>$99.99</h4>
+                        </div>
+                    </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="slider-dots" id="sliderDots"></div>
+            <div class="arrivals-bottom-texts">
+                <h1>Here every click is a step <br> towards a more stylish you</h1>
+            </div>
+        </section>
+
+        <section class="section-grid">
+            <div class="grid-column">
+                <div class="image-content image-content1">
+                    <h1>nike solo swoosh</h1>
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image-removebg-preview%20(5).png" alt="Nike Solo Swoosh">
+                </div>
+            </div>
+            <div class="grid-column">
+                <div class="image-content image-content2">
+                    <h1>jordan flight fleece</h1>
+                    <video autoplay playsinline muted loop src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/From%20KlickPin%20CF%20Pinterest%20Pin-11610911541550627.mp4"></video>
+                </div>
+            </div>
+            <div class="grid-column">
+                <div class="image-content image-content3">
+                    <h1>nike sportwear therma</h1>
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image-removebg-preview%20(6).png" alt="Nike Sportswear">
+                </div>
+            </div>
+        </section>
+
+        <section class="jackets">
+            <h2>Drips</h2>
+            <div class="jacket-items">
+                {% for product in drip_products %}
+                <a href="{% url 'productDetail' product.slug %}" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+                </a>
+                {% empty %}
+                <!-- Fallback static items if no jacket products are available -->
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2026.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2025.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2024.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2023.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2024.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2025.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2026.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2024.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2026.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2026.png" alt="Jacket">
+                </div>
+                </a>
+                <a href="#" class="jacket-item-link">
+                <div class="jacket-item">
+                    <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2025.png" alt="Jacket">
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="shoes-slider">
+            <div class="shoes-slider-header">
+                <h1>Footwear Collection</h1>
+                <div class="shoes-controls">
+                    <button class="shoes-control-btn" id="shoesPrevBtn" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="shoes-control-btn" id="shoesNextBtn" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="shoes-slider-container">
+                <div class="shoes-track" id="shoesTrack">
+                    {% for product in footwear_products %}
+                    <a href="{% url 'productDetail' product.slug %}" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">{{ product.category.name }}</div>
+                            <h2>{{ product.name }}</h2>
+                            <div class="shoes-price-row">
+                                <h4>₹{{ product.price }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    {% empty %}
+                    <!-- Fallback static items if no footwear products are available -->
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2032.png" alt="Nike Air Max">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Sneakers</div>
+                            <h2>Nike Air Max</h2>
+                            <div class="shoes-price-row">
+                                <h4>$159.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2033.png" alt="Classic Runners">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Premium</div>
+                            <h2>Classic Runners</h2>
+                            <div class="shoes-price-row">
+                                <h4>$189.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2034.png" alt="Performance Pro">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Sport</div>
+                            <h2>Performance Pro</h2>
+                            <div class="shoes-price-row">
+                                <h4>$199.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2035.png" alt="Ultra Boost">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Running</div>
+                            <h2>Ultra Boost</h2>
+                            <div class="shoes-price-row">
+                                <h4>$179.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2036.png" alt="Street Style">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Casual</div>
+                            <h2>Street Style</h2>
+                            <div class="shoes-price-row">
+                                <h4>$149.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2037.png" alt="Limited Edition">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">Designer</div>
+                            <h2>Limited Edition</h2>
+                            <div class="shoes-price-row">
+                                <h4>$249.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="#" class="shoes-item-link">
+                    <div class="shoes-item">
+                        <div class="shoes-image-wrapper">
+                            <img src="https://raw.githubusercontent.com/Rakesh07778777/Drip-Space/main/image%20copy%2038.png" alt="Urban Classic">
+                        </div>
+                        <div class="shoes-info">
+                            <div class="shoes-category">High Top</div>
+                            <h2>Urban Classic</h2>
+                            <div class="shoes-price-row">
+                                <h4>$169.99</h4>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <div class="page6">
+            <h2>mens clothing</h2>
+            <p>Check out all the freshest styles your closet needs in our men's clothing range. You'll find a roundup of everyday essentials, including tops and T-Shirts, as well as comfy lounge sets and underwear. Formal event coming up? Scroll no further than our men's blazers and suits for the sharpest looks and nail the dress code. When it comes to men's pants, there's chinos, joggers and cargo styles in all the staple colors. dreaming of denim? our <span><a href="#">men's jeans</a></span> offer a range of fits to suit your style, including skinny, straight and tapered, to name just a few. Wear yours with a trendy oversized shirt or a classic denim number from our men's shirts edit. and when it comes to chilly weather, our men's jackets and coats have you covered – we've got puffer jackets and trench coats, as well as leather jackets and bomber jackets in year-round colors.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Wait for everything to load
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // =====================================================
+            // CHARACTER ANIMATION
+            // =====================================================
+            function initTextAnimations() {
+                const brandName = document.getElementById('dripspace-brand-name');
+                if (brandName) {
+                    const brandText = 'DripSpace';
+                    brandName.innerHTML = brandText.split('').map(char => 
+                        `<span class="dripspace-hero-brand-name-char">${char}</span>`
+                    ).join('');
+
+                    const mainHeading = document.getElementById('dripspace-main-heading');
+                    if (mainHeading) {
+                        const headingText = 'Premium style zero effort';
+                        mainHeading.innerHTML = headingText.split('').map(char => 
+                            `<span class="dripspace-hero-main-heading-char">${char === ' ' ? '&nbsp;' : char}</span>`
+                        ).join('');
+                    }
+
+                    const subheading = document.getElementById('dripspace-subheading');
+                    if (subheading) {
+                        const subheadingText = 'Where clean aesthetics meet elevated comfort';
+                        subheading.innerHTML = subheadingText.split('').map(char => 
+                            `<span class="dripspace-hero-subheading-char">${char === ' ' ? '&nbsp;' : char}</span>`
+                        ).join('');
+                    }
+
+                    const brandChars = brandName.querySelectorAll('.dripspace-hero-brand-name-char');
+                    brandChars.forEach((char, index) => {
+                        setTimeout(() => {
+                            char.classList.add('dripspace-animated');
+                        }, 400 + (index * 50));
+                    });
+
+                    if (mainHeading) {
+                        const headingChars = mainHeading.querySelectorAll('.dripspace-hero-main-heading-char');
+                        headingChars.forEach((char, index) => {
+                            setTimeout(() => {
+                                char.classList.add('dripspace-animated');
+                            }, 700 + (index * 30));
+                        });
+                    }
+
+                    if (subheading) {
+                        const subheadingChars = subheading.querySelectorAll('.dripspace-hero-subheading-char');
+                        subheadingChars.forEach((char, index) => {
+                            setTimeout(() => {
+                                char.classList.add('dripspace-animated');
+                            }, 1000 + (index * 20));
+                        });
+                    }
+                }
+            }
+
+            initTextAnimations();
+
+            // =====================================================
+            // GSAP ANIMATIONS
+            // =====================================================
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Page3 Image Cards Stagger Animation - Run on ALL screen sizes
+                const page3Cards = document.querySelectorAll('.page3-image');
+                if (page3Cards.length > 0) {
+                    // First, set initial state for desktop
+                    if (window.innerWidth > 768) {
+                        gsap.utils.toArray('.page3-image').forEach((card, i) => {
+                            gsap.to(card, {
+                                scrollTrigger: {
+                                    trigger: card,
+                                    start: 'top 85%',
+                                    end: 'bottom 15%',
+                                    toggleActions: 'play none none reverse'
+                                },
+                                opacity: 1,
+                                y: 0,
+                                duration: 1,
+                                delay: i * 0.2,
+                                ease: 'power3.out'
+                            });
+                        });
+                    }
+                }
+
+                // Other animations...
+                const arrivalsHeader = document.querySelector('.arrivals-header');
+                if (arrivalsHeader && window.innerWidth > 768) {
+                    gsap.from(arrivalsHeader, {
+                        scrollTrigger: {
+                            trigger: '.arrivals',
+                            start: 'top 80%',
+                            toggleActions: 'play none none reverse'
+                        },
+                        opacity: 0,
+                        y: -50,
+                        duration: 1
+                    });
+                }
+
+                const gridColumns = document.querySelectorAll('.grid-column');
+                if (gridColumns.length > 0 && window.innerWidth > 768) {
+                    gsap.utils.toArray('.grid-column').forEach((col, i) => {
+                        gsap.from(col, {
+                            scrollTrigger: {
+                                trigger: col,
+                                start: 'top 80%',
+                                toggleActions: 'play none none reverse'
+                            },
+                            opacity: 0,
+                            scale: 0.9,
+                            rotation: i % 2 === 0 ? -5 : 5,
+                            duration: 1,
+                            delay: i * 0.15,
+                            ease: 'power2.out'
+                        });
+                    });
+                }
+
+                ScrollTrigger.refresh();
+            }
+
+            // =====================================================
+            // ARRIVALS SLIDER - DUAL MODE (Desktop: JS slider, Mobile: Native scroll)
+            // =====================================================
+            function initArrivalsSlider() {
+                const sliderTrack = document.getElementById('sliderTrack');
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const dotsContainer = document.getElementById('sliderDots');
+                const items = document.querySelectorAll('.arrival-items');
+
+                if (!sliderTrack || !prevBtn || !nextBtn || items.length === 0) return;
+
+                let currentIndex = 0;
+                let itemsToShow = getItemsToShow();
+                let isMobile = window.innerWidth <= 768;
+                let isDragging = false;
+                let startPos = 0;
+                let currentTranslate = 0;
+                let prevTranslate = 0;
+                let animationID;
+
+                function getItemsToShow() {
+                    const width = window.innerWidth;
+                    if (width < 480) return 1;
+                    if (width < 768) return 2;
+                    if (width < 1024) return 3;
+                    return 3;
+                }
+
+                function getTotalSlides() {
+                    return Math.ceil(items.length / itemsToShow);
+                }
+
+                function createDots() {
+                    if (!dotsContainer || isMobile) return;
+                    dotsContainer.innerHTML = '';
+                    const totalSlides = getTotalSlides();
+
+                    for (let i = 0; i < totalSlides; i++) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('dot');
+                        if (i === 0) dot.classList.add('active');
+                        dot.addEventListener('click', () => goToSlide(i));
+                        dotsContainer.appendChild(dot);
+                    }
+                }
+
+                function updateDots() {
+                    if (isMobile) return;
+                    const dots = document.querySelectorAll('.dot');
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentIndex);
+                    });
+                }
+
+                function moveSlider() {
+                    if (isMobile) return;
+                    
+                    const gap = 24;
+                    const itemWidth = items[0].offsetWidth;
+                    const moveAmount = currentIndex * (itemWidth * itemsToShow + gap * itemsToShow);
+                    sliderTrack.style.transform = `translateX(-${moveAmount}px)`;
+                    updateDots();
+                }
+
+                function nextSlide() {
+                    if (isMobile) return;
+                    
+                    const totalSlides = getTotalSlides();
+                    if (currentIndex < totalSlides - 1) {
+                        currentIndex++;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    moveSlider();
+                }
+
+                function prevSlide() {
+                    if (isMobile) return;
+                    
+                    const totalSlides = getTotalSlides();
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                    } else {
+                        currentIndex = totalSlides - 1;
+                    }
+                    moveSlider();
+                }
+
+                function goToSlide(index) {
+                    if (isMobile) return;
+                    
+                    currentIndex = index;
+                    moveSlider();
+                }
+
+                // Touch/swipe handlers for mobile
+                function setupTouchEvents() {
+                    if (!isMobile) return;
+                    
+                    const container = document.querySelector('.arrival-container');
+                    
+                    function getPositionX(event) {
+                        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+                    }
+                    
+                    function setSliderPosition() {
+                        sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+                    }
+                    
+                    function animation() {
+                        setSliderPosition();
+                        if (isDragging) {
+                            requestAnimationFrame(animation);
+                        }
+                    }
+                    
+                    function touchStart(event) {
+                        if (event.type === 'touchstart') {
+                            startPos = getPositionX(event);
+                            isDragging = true;
+                            animationID = requestAnimationFrame(animation);
+                            sliderTrack.style.transition = 'none';
+                        }
+                    }
+                    
+                    function touchMove(event) {
+                        if (isDragging) {
+                            const currentPosition = getPositionX(event);
+                            currentTranslate = prevTranslate + currentPosition - startPos;
+                        }
+                    }
+                    
+                    function touchEnd() {
+                        if (!isDragging) return;
+                        
+                        isDragging = false;
+                        cancelAnimationFrame(animationID);
+                        
+                        const movedBy = currentTranslate - prevTranslate;
+                        const threshold = 100; // Minimum swipe distance
+                        
+                        if (movedBy < -threshold && currentIndex < items.length - 1) {
+                            currentIndex += 1;
+                        } else if (movedBy > threshold && currentIndex > 0) {
+                            currentIndex -= 1;
+                        }
+                        
+                        // Snap to position
+                        setPositionByIndex();
+                        prevTranslate = currentTranslate;
+                    }
+                    
+                    function setPositionByIndex() {
+                        const gap = 24;
+                        const itemWidth = items[0].offsetWidth;
+                        currentTranslate = currentIndex * -(itemWidth + gap);
+                        sliderTrack.style.transition = 'transform 0.3s ease-out';
+                        setSliderPosition();
+                    }
+                    
+                    // Event listeners for touch
+                    container.addEventListener('touchstart', touchStart);
+                    container.addEventListener('touchmove', touchMove);
+                    container.addEventListener('touchend', touchEnd);
+                    
+                    // Event listeners for mouse (for testing on desktop)
+                    container.addEventListener('mousedown', touchStart);
+                    container.addEventListener('mousemove', touchMove);
+                    container.addEventListener('mouseup', touchEnd);
+                    container.addEventListener('mouseleave', touchEnd);
+                }
+
+                // Initialize based on device
+                if (!isMobile) {
+                    nextBtn.addEventListener('click', nextSlide);
+                    prevBtn.addEventListener('click', prevSlide);
+                    createDots();
+                    moveSlider();
+                } else {
+                    // Hide arrow buttons on mobile
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    setupTouchEvents();
+                }
+
+                window.addEventListener('resize', () => {
+                    const oldIsMobile = isMobile;
+                    isMobile = window.innerWidth <= 768;
+                    itemsToShow = getItemsToShow();
+                    
+                    if (oldIsMobile !== isMobile) {
+                        // Mode changed between mobile and desktop
+                        currentIndex = 0;
+                        prevTranslate = 0;
+                        currentTranslate = 0;
+                        
+                        if (isMobile) {
+                            prevBtn.style.display = 'none';
+                            nextBtn.style.display = 'none';
+                            sliderTrack.style.transform = 'translateX(0)';
+                            sliderTrack.style.transition = 'none';
+                            setupTouchEvents();
+                        } else {
+                            prevBtn.style.display = 'flex';
+                            nextBtn.style.display = 'flex';
+                            createDots();
+                            moveSlider();
+                        }
+                    } else if (!isMobile && oldIsMobile === false) {
+                        // Desktop resize only
+                        createDots();
+                        moveSlider();
+                    }
+                });
+            }
+
+            // =====================================================
+            // SHOES SLIDER - DUAL MODE (Desktop: JS slider, Mobile: Native scroll)
+            // =====================================================
+            function initShoesSlider() {
+                const shoesTrack = document.getElementById('shoesTrack');
+                const shoesPrev = document.getElementById('shoesPrevBtn');
+                const shoesNext = document.getElementById('shoesNextBtn');
+                const shoesItems = document.querySelectorAll('.shoes-item');
+
+                if (!shoesTrack || !shoesPrev || !shoesNext || shoesItems.length === 0) return;
+
+                let shoesIndex = 0;
+                let shoesToShow = getShoesItemsToShow();
+                let isMobile = window.innerWidth <= 768;
+                let isDragging = false;
+                let startPos = 0;
+                let currentTranslate = 0;
+                let prevTranslate = 0;
+                let animationID;
+
+                function getShoesItemsToShow() {
+                    const width = window.innerWidth;
+                    if (width < 480) return 1;
+                    if (width < 768) return 2;
+                    return 3;
+                }
+
+                function moveShoesSlider() {
+                    if (isMobile) return;
+                    
+                    const gap = 32;
+                    const itemWidth = shoesItems[0].offsetWidth;
+                    const moveAmount = shoesIndex * (itemWidth * shoesToShow + gap * shoesToShow);
+                    shoesTrack.style.transform = `translateX(-${moveAmount}px)`;
+                }
+
+                function nextShoes() {
+                    if (isMobile) return;
+                    
+                    const total = Math.ceil(shoesItems.length / shoesToShow);
+                    shoesIndex = (shoesIndex + 1) % total;
+                    moveShoesSlider();
+                }
+
+                function prevShoes() {
+                    if (isMobile) return;
+                    
+                    const total = Math.ceil(shoesItems.length / shoesToShow);
+                    if (shoesIndex > 0) {
+                        shoesIndex--;
+                    } else {
+                        shoesIndex = total - 1;
+                    }
+                    moveShoesSlider();
+                }
+
+                // Touch/swipe handlers for mobile
+                function setupShoesTouchEvents() {
+                    if (!isMobile) return;
+                    
+                    const container = document.querySelector('.shoes-slider-container');
+                    
+                    function getPositionX(event) {
+                        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+                    }
+                    
+                    function setSliderPosition() {
+                        shoesTrack.style.transform = `translateX(${currentTranslate}px)`;
+                    }
+                    
+                    function animation() {
+                        setSliderPosition();
+                        if (isDragging) {
+                            requestAnimationFrame(animation);
+                        }
+                    }
+                    
+                    function touchStart(event) {
+                        if (event.type === 'touchstart') {
+                            startPos = getPositionX(event);
+                            isDragging = true;
+                            animationID = requestAnimationFrame(animation);
+                            shoesTrack.style.transition = 'none';
+                        }
+                    }
+                    
+                    function touchMove(event) {
+                        if (isDragging) {
+                            const currentPosition = getPositionX(event);
+                            currentTranslate = prevTranslate + currentPosition - startPos;
+                        }
+                    }
+                    
+                    function touchEnd() {
+                        if (!isDragging) return;
+                        
+                        isDragging = false;
+                        cancelAnimationFrame(animationID);
+                        
+                        const movedBy = currentTranslate - prevTranslate;
+                        const threshold = 100; // Minimum swipe distance
+                        
+                        if (movedBy < -threshold && shoesIndex < shoesItems.length - 1) {
+                            shoesIndex += 1;
+                        } else if (movedBy > threshold && shoesIndex > 0) {
+                            shoesIndex -= 1;
+                        }
+                        
+                        // Snap to position
+                        setShoesPositionByIndex();
+                        prevTranslate = currentTranslate;
+                    }
+                    
+                    function setShoesPositionByIndex() {
+                        const gap = 32;
+                        const itemWidth = shoesItems[0].offsetWidth;
+                        currentTranslate = shoesIndex * -(itemWidth + gap);
+                        shoesTrack.style.transition = 'transform 0.3s ease-out';
+                        setSliderPosition();
+                    }
+                    
+                    // Event listeners for touch
+                    container.addEventListener('touchstart', touchStart);
+                    container.addEventListener('touchmove', touchMove);
+                    container.addEventListener('touchend', touchEnd);
+                    
+                    // Event listeners for mouse (for testing on desktop)
+                    container.addEventListener('mousedown', touchStart);
+                    container.addEventListener('mousemove', touchMove);
+                    container.addEventListener('mouseup', touchEnd);
+                    container.addEventListener('mouseleave', touchEnd);
+                }
+
+                // Initialize based on device
+                if (!isMobile) {
+                    shoesNext.addEventListener('click', nextShoes);
+                    shoesPrev.addEventListener('click', prevShoes);
+                    moveShoesSlider();
+                } else {
+                    // Hide arrow buttons on mobile
+                    shoesPrev.style.display = 'none';
+                    shoesNext.style.display = 'none';
+                    setupShoesTouchEvents();
+                }
+
+                window.addEventListener('resize', () => {
+                    const oldIsMobile = isMobile;
+                    isMobile = window.innerWidth <= 768;
+                    shoesToShow = getShoesItemsToShow();
+                    
+                    if (oldIsMobile !== isMobile) {
+                        // Mode changed between mobile and desktop
+                        shoesIndex = 0;
+                        prevTranslate = 0;
+                        currentTranslate = 0;
+                        
+                        if (isMobile) {
+                            shoesPrev.style.display = 'none';
+                            shoesNext.style.display = 'none';
+                            shoesTrack.style.transform = 'translateX(0)';
+                            shoesTrack.style.transition = 'none';
+                            setupShoesTouchEvents();
+                        } else {
+                            shoesPrev.style.display = 'flex';
+                            shoesNext.style.display = 'flex';
+                            moveShoesSlider();
+                        }
+                    } else if (!isMobile && oldIsMobile === false) {
+                        // Desktop resize only
+                        moveShoesSlider();
+                    }
+                });
+            }
+
+            // Initialize sliders
+            initArrivalsSlider();
+            initShoesSlider();
+
+            // =====================================================
+            // PAGE3 HOVER SECTIONS
+            // =====================================================
+            function initPage3Hover() {
+                const hoverSections = document.querySelectorAll('.hover-section');
+                hoverSections.forEach(section => {
+                    const header = section.querySelector('.section-header');
+                    const content = section.querySelector('.section-content');
+                    
+                    if (header && content) {
+                        header.addEventListener('click', () => {
+                            section.classList.toggle('active');
+                            if (section.classList.contains('active')) {
+                                content.style.maxHeight = content.scrollHeight + 'px';
+                                content.style.opacity = '1';
+                            } else {
+                                content.style.maxHeight = '0';
+                                content.style.opacity = '0';
+                            }
+                        });
+                    }
+                });
+            }
+
+            initPage3Hover();
+
+        }); // End of DOMContentLoaded
+    </script>
+
+{% endblock content %}

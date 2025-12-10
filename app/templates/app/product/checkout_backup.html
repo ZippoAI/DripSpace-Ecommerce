@@ -1,0 +1,1163 @@
+
+{% extends "app/includes/base.html" %}
+
+  {% load custom_filters %}
+
+{% block content %}
+
+<!-- DripSpace Checkout Section -->
+<div class="ds-checkout-root">
+  
+  <!-- Page Header -->
+  <div class="ds-checkout-header">
+    <h1 class="ds-checkout-title">Checkout</h1>
+    <p class="ds-checkout-subtitle">Complete your order details</p>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="ds-checkout-grid">
+    
+    <!-- Left Column: Forms -->
+    <div class="ds-checkout-forms">
+      
+      <!-- Shipping Address Panel -->
+      <div class="ds-address-panel">
+        <div class="ds-panel-header">
+          <div class="ds-panel-number">1</div>
+          <h2 class="ds-panel-title">Shipping Address</h2>
+        </div>
+        
+        <form class="ds-form" id="dsAddressForm" method="POST" action="{% url 'process_checkout' %}">
+          {% csrf_token %}
+          <div class="ds-form-grid">
+            <!-- Full Name -->
+            <div class="ds-form-group ds-full-width">
+              <label for="fullName" class="ds-label">Full Name *</label>
+              <input 
+                type="text" 
+                id="fullName" 
+                name="fullName" 
+                class="ds-input" 
+                placeholder="Enter your full name"
+                value="{{ profile.full_name }}"
+                required
+              />
+            </div>
+
+            <!-- Phone -->
+            <div class="ds-form-group">
+              <label for="phone" class="ds-label">Phone Number *</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                class="ds-input" 
+                placeholder="+91 00000 00000"
+                value="{{ user.phone_no }}"
+                required
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="ds-form-group">
+              <label for="email" class="ds-label">Email Address *</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="ds-input" 
+                placeholder="you@example.com"
+                value="{{ user.email }}"
+                required
+              />
+            </div>
+
+            <!-- Address Line 1 -->
+            <div class="ds-form-group ds-full-width">
+              <label for="address1" class="ds-label">Address Line 1 *</label>
+              <input 
+                type="text" 
+                id="address1" 
+                name="address1" 
+                class="ds-input" 
+                placeholder="Street address, P.O. box"
+                value="{{ profile.address|split_lines|first }}"
+                required
+              />
+            </div>
+
+            <!-- Address Line 2 -->
+            <div class="ds-form-group ds-full-width">
+              <label for="address2" class="ds-label">Address Line 2 (Optional)</label>
+              <input 
+                type="text" 
+                id="address2" 
+                name="address2" 
+                class="ds-input" 
+                placeholder="Apartment, suite, unit, etc."
+                value="{% if profile.address|split_lines|length > 1 %}{{ profile.address|split_lines|last }}{% endif %}"
+              />
+            </div>
+
+            <!-- City -->
+            <div class="ds-form-group">
+              <label for="city" class="ds-label">City *</label>
+              <input 
+                type="text" 
+                id="city" 
+                name="city" 
+                class="ds-input" 
+                placeholder="Enter city"
+                value="{{ profile.city }}"
+                required
+              />
+            </div>
+
+            <!-- State -->
+            <div class="ds-form-group">
+              <label for="state" class="ds-label">State *</label>
+              <select id="state" name="state" class="ds-input ds-select" required>
+                <option value="">Select state</option>
+                <option value="Assam" {% if profile.state == "Assam" %}selected{% endif %}>Assam</option>
+                <option value="Delhi" {% if profile.state == "Delhi" %}selected{% endif %}>Delhi</option>
+                <option value="Maharashtra" {% if profile.state == "Maharashtra" %}selected{% endif %}>Maharashtra</option>
+                <option value="Karnataka" {% if profile.state == "Karnataka" %}selected{% endif %}>Karnataka</option>
+                <option value="Tamil Nadu" {% if profile.state == "Tamil Nadu" %}selected{% endif %}>Tamil Nadu</option>
+                <option value="West Bengal" {% if profile.state == "West Bengal" %}selected{% endif %}>West Bengal</option>
+                <option value="Gujarat" {% if profile.state == "Gujarat" %}selected{% endif %}>Gujarat</option>
+                <option value="Rajasthan" {% if profile.state == "Rajasthan" %}selected{% endif %}>Rajasthan</option>
+              </select>
+            </div>
+
+            <!-- Pincode -->
+            <div class="ds-form-group">
+              <label for="pincode" class="ds-label">Pincode *</label>
+              <input 
+                type="text" 
+                id="pincode" 
+                name="pincode" 
+                class="ds-input" 
+                placeholder="000000"
+                value="{{ profile.pincode }}"
+                maxlength="6"
+                required
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Payment Method Panel -->
+      <div class="ds-payment-method-block">
+        <div class="ds-panel-header">
+          <div class="ds-panel-number">2</div>
+          <h2 class="ds-panel-title">Payment Method</h2>
+        </div>
+
+        <div class="ds-payment-options">
+          
+          <!-- Credit Card -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="credit-card" 
+              class="ds-payment-radio"
+              checked
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              <span class="ds-payment-label">Credit Card</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <!-- Debit Card -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="debit-card" 
+              class="ds-payment-radio"
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              <span class="ds-payment-label">Debit Card</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <!-- UPI -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="upi" 
+              class="ds-payment-radio"
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
+              <span class="ds-payment-label">UPI</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <!-- Google Pay -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="gpay" 
+              class="ds-payment-radio"
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64L15 8.5"></path>
+                <path d="M12 2v10l4 4"></path>
+              </svg>
+              <span class="ds-payment-label">Google Pay</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <!-- PhonePe -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="phonepe" 
+              class="ds-payment-radio"
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+              <span class="ds-payment-label">PhonePe</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <!-- Cash on Delivery -->
+          <label class="ds-payment-option-tile">
+            <input 
+              type="radio" 
+              name="paymentMethod" 
+              value="cod" 
+              class="ds-payment-radio"
+            />
+            <div class="ds-payment-tile-content">
+              <svg class="ds-payment-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              <span class="ds-payment-label">Cash on Delivery</span>
+            </div>
+            <div class="ds-payment-checkmark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </label>
+        </div>
+
+        <!-- Card Details (shown for credit/debit) -->
+        <div class="ds-card-input-group" id="cardInputs">
+          <div class="ds-form-grid">
+            <div class="ds-form-group ds-full-width">
+              <label for="cardNumber" class="ds-label">Card Number *</label>
+              <input 
+                type="text" 
+                id="cardNumber" 
+                class="ds-input" 
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+              />
+            </div>
+
+            <div class="ds-form-group">
+              <label for="expiry" class="ds-label">Expiry Date *</label>
+              <input 
+                type="text" 
+                id="expiry" 
+                class="ds-input" 
+                placeholder="MM/YY"
+                maxlength="5"
+              />
+            </div>
+
+            <div class="ds-form-group">
+              <label for="cvv" class="ds-label">CVV *</label>
+              <input 
+                type="text" 
+                id="cvv" 
+                class="ds-input" 
+                placeholder="123"
+                maxlength="3"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI ID Input (shown for UPI) -->
+        <div class="ds-card-input-group" id="upiInput" style="display: none;">
+          <div class="ds-form-group ds-full-width">
+            <label for="upiId" class="ds-label">UPI ID *</label>
+            <input 
+              type="text" 
+              id="upiId" 
+              class="ds-input" 
+              placeholder="yourname@upi"
+            />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Order Summary -->
+    <div class="ds-order-summary-sidebar">
+      <div class="ds-order-summary-card">
+        <h3 class="ds-summary-title">Order Summary</h3>
+        
+        <!-- Cart Items -->
+        <div class="ds-summary-items">
+          {% for item in cart_items %}
+          <div class="ds-summary-item">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="ds-summary-thumb" />
+            <div class="ds-summary-item-info">
+              <div class="ds-summary-item-name">{{ item.product.name }}</div>
+              <div class="ds-summary-item-meta">Qty: {{ item.quantity }} × Rs. {{ item.product.price }}</div>
+            </div>
+            <div class="ds-summary-item-price">Rs. {{ item.get_total_price }}</div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="ds-summary-divider"></div>
+
+        <!-- Totals -->
+        <div class="ds-summary-row">
+          <span class="ds-summary-label">Subtotal</span>
+          <span class="ds-summary-value">Rs. {{ cart.get_total_price|floatformat:2 }}</span>
+        </div>
+
+        <div class="ds-summary-row">
+          <span class="ds-summary-label">Discount</span>
+          <span class="ds-summary-value ds-discount">-Rs. 20.00</span>
+        </div>
+
+        <div class="ds-summary-row">
+          <span class="ds-summary-label">Shipping</span>
+          <span class="ds-summary-value">Rs. 15.00</span>
+        </div>
+
+        <div class="ds-summary-divider"></div>
+
+        <div class="ds-summary-row ds-summary-total">
+          <span class="ds-summary-label">Total</span>
+          <span class="ds-summary-value">Rs. {{ cart.get_total_price|add:"15"|add:"-20"|floatformat:2 }}</span>
+        </div>
+
+        <!-- Buy Now Button -->
+        <button class="ds-buy-now-btn" id="buyNowBtn">
+          Complete Purchase
+        </button>
+
+        <div class="ds-secure-notice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Secure checkout powered by DripSpace</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ==========================================
+   DripSpace Checkout - Core Styles
+   ========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.ds-checkout-root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+  padding: 24px 16px;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page Header */
+.ds-checkout-header {
+  margin-bottom: 32px;
+}
+
+.ds-checkout-title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+}
+
+.ds-checkout-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* Checkout Grid Layout */
+.ds-checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Panel Styles */
+.ds-address-panel,
+.ds-payment-method-block {
+  background: white;
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.ds-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ds-panel-number {
+  width: 36px;
+  height: 36px;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.ds-panel-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Form Styles */
+.ds-form {
+  margin: 0;
+}
+
+.ds-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.ds-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-full-width {
+  grid-column: 1 / -1;
+}
+
+.ds-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.ds-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.ds-input:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.ds-input::placeholder {
+  color: #999;
+}
+
+.ds-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Payment Options Grid */
+.ds-payment-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ds-payment-option-tile {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.ds-payment-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ds-payment-tile-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 2px solid #e5e5e5;
+  border-radius: 10px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.ds-payment-icon {
+  width: 24px;
+  height: 24px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.ds-payment-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.ds-payment-checkmark {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+}
+
+.ds-payment-checkmark svg {
+  width: 14px;
+  height: 14px;
+  stroke: white;
+}
+
+/* Selected Payment Tile */
+.ds-payment-radio:checked + .ds-payment-tile-content {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.ds-payment-radio:checked + .ds-payment-tile-content .ds-payment-icon {
+  color: #dc2626;
+}
+
+.ds-payment-radio:checked ~ .ds-payment-checkmark {
+  background: #dc2626;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Hover State */
+.ds-payment-option-tile:hover .ds-payment-tile-content {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Card Input Group (conditional) */
+.ds-card-input-group {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+  animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Order Summary Sidebar */
+.ds-order-summary-sidebar {
+  position: sticky;
+  top: 24px;
+  height: fit-content;
+}
+
+.ds-order-summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.ds-summary-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+/* Summary Items */
+.ds-summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ds-summary-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.ds-summary-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f5f5f5;
+}
+
+.ds-summary-item-info {
+  min-width: 0;
+}
+
+.ds-summary-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-summary-item-meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.ds-summary-item-price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: right;
+}
+
+.ds-summary-divider {
+  height: 1px;
+  background: #e5e5e5;
+  margin: 20px 0;
+}
+
+/* Summary Rows */
+.ds-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ds-summary-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.ds-summary-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ds-discount {
+  color: #dc2626;
+}
+
+.ds-summary-total {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.ds-summary-total .ds-summary-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ds-summary-total .ds-summary-value {
+  font-size: 20px;
+}
+
+/* Buy Now Button */
+.ds-buy-now-btn {
+  width: 100%;
+  padding: 16px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.ds-buy-now-btn:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.ds-buy-now-btn:disabled {
+  background: #e5e5e5;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ds-buy-now-btn:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Secure Notice */
+.ds-secure-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+}
+
+.ds-secure-notice svg {
+  width: 16px;
+  height: 16px;
+  color: #999;
+}
+
+/* ==========================================
+   Responsive Design
+   ========================================== */
+
+@media (min-width: 640px) {
+  .ds-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ds-payment-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .ds-checkout-root {
+    padding: 40px 32px;
+  }
+
+  .ds-checkout-header {
+    margin-bottom: 40px;
+  }
+
+  .ds-payment-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ds-checkout-grid {
+    grid-template-columns: 1fr 420px;
+    gap: 40px;
+  }
+
+  .ds-address-panel,
+  .ds-payment-method-block {
+    padding: 32px 28px;
+  }
+
+  .ds-order-summary-card {
+    padding: 32px 28px;
+  }
+}
+</style>
+
+<script>
+/* ==========================================
+   DripSpace Checkout - JavaScript Logic
+   ========================================== */
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  initPaymentMethodToggle();
+  initFormValidation();
+  initCardFormatting();
+  initPincodeValidation();
+  
+  // Initialize buy now button
+  const buyNowBtn = document.getElementById('buyNowBtn');
+  const form = document.getElementById('dsAddressForm');
+  
+  if (buyNowBtn && form) {
+    buyNowBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Validate form before submission
+      if (!buyNowBtn.disabled) {
+        // Submit the form
+        form.submit();
+      }
+    });
+  }
+});
+
+/* ==========================================
+   Payment Method Toggle
+   ========================================== */
+function initPaymentMethodToggle() {
+  const paymentRadios = document.querySelectorAll('.ds-payment-radio');
+  const cardInputs = document.getElementById('cardInputs');
+  const upiInput = document.getElementById('upiInput');
+  
+  if (!paymentRadios.length) return;
+  
+  paymentRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const value = radio.value;
+      
+      // Hide all conditional inputs first
+      if (cardInputs) cardInputs.style.display = 'none';
+      if (upiInput) upiInput.style.display = 'none';
+      
+      // Show relevant inputs based on selection
+      if (value === 'credit-card' || value === 'debit-card') {
+        if (cardInputs) cardInputs.style.display = 'block';
+      } else if (value === 'upi') {
+        if (upiInput) upiInput.style.display = 'block';
+      }
+      
+      // Revalidate form
+      validateForm();
+    });
+  });
+}
+
+/* ==========================================
+  Form Validation
+  ========================================== */
+function initFormValidation() {
+  const form = document.getElementById('dsAddressForm');
+  const buyNowBtn = document.getElementById('buyNowBtn');
+  
+  if (!form || !buyNowBtn) return;
+  
+  // Get all inputs that need validation
+  const addressInputs = form.querySelectorAll('input[required], select[required]');
+  const cardNumber = document.getElementById('cardNumber');
+  const expiry = document.getElementById('expiry');
+  const cvv = document.getElementById('cvv');
+  const upiId = document.getElementById('upiId');
+  
+  // Listen to all inputs
+  const allInputs = [...addressInputs];
+  if (cardNumber) allInputs.push(cardNumber);
+  if (expiry) allInputs.push(expiry);
+  if (cvv) allInputs.push(cvv);
+  if (upiId) allInputs.push(upiId);
+  
+  allInputs.forEach(input => {
+    // Remove any existing listeners to prevent duplicates
+    input.removeEventListener('input', validateForm);
+    input.removeEventListener('blur', validateForm);
+    
+    // Add new listeners
+    input.addEventListener('input', validateForm);
+    input.addEventListener('blur', validateForm);
+  });
+  
+  // Listen to payment method changes
+  document.querySelectorAll('.ds-payment-radio').forEach(radio => {
+    radio.addEventListener('change', validateForm);
+  });
+  
+  // Initial validation
+  validateForm();
+}
+
+function validateForm() {
+  const buyNowBtn = document.getElementById('buyNowBtn');
+  const form = document.getElementById('dsAddressForm');
+  
+  if (!buyNowBtn || !form) return;
+  
+  // Check address form validity
+  const addressInputs = form.querySelectorAll('input[required], select[required]');
+  let addressValid = true;
+  
+  addressInputs.forEach(input => {
+    if (!input.value.trim()) {
+      addressValid = false;
+    }
+  });
+  
+  // Check payment method specific validation
+  const selectedPayment = document.querySelector('.ds-payment-radio:checked');
+  if (!selectedPayment) {
+    buyNowBtn.disabled = true;
+    return;
+  }
+  
+  const selectedPaymentValue = selectedPayment.value;
+  let paymentValid = true;
+  
+  if (selectedPaymentValue === 'credit-card' || selectedPaymentValue === 'debit-card') {
+    const cardNumber = document.getElementById('cardNumber');
+    const expiry = document.getElementById('expiry');
+    const cvv = document.getElementById('cvv');
+    
+    if (cardNumber && (!cardNumber.value.trim() || cardNumber.value.replace(/\s/g, '').length < 13)) {
+      paymentValid = false;
+    }
+    if (expiry && (!expiry.value.trim() || !expiry.value.match(/^\d{2}\/\d{2}$/))) {
+      paymentValid = false;
+    }
+    if (cvv && (!cvv.value.trim() || cvv.value.length < 3)) {
+      paymentValid = false;
+    }
+  } else if (selectedPaymentValue === 'upi') {
+    const upiId = document.getElementById('upiId');
+    if (upiId && (!upiId.value.trim() || !upiId.value.includes('@'))) {
+      paymentValid = false;
+    }
+  }
+  
+  // Enable/disable buy button
+  buyNowBtn.disabled = !(addressValid && paymentValid);
+}
+
+/* ==========================================
+   Card Number Formatting
+   ========================================== */
+function initCardFormatting() {
+  const cardNumber = document.getElementById('cardNumber');
+  const expiry = document.getElementById('expiry');
+  const cvv = document.getElementById('cvv');
+  
+  if (cardNumber) {
+    // Format card number (add spaces every 4 digits)
+    cardNumber.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\s/g, '');
+      value = value.replace(/\D/g, ''); // Only digits
+      
+      // Add space every 4 digits
+      let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+      e.target.value = formatted;
+    });
+    
+    // Prevent non-numeric input for card number
+    cardNumber.addEventListener('keypress', (e) => {
+      // Allow: backspace, delete, tab, escape, enter
+      if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+          // Allow: Ctrl+A, Command+A
+          (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+C, Command+C
+          (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+V, Command+V
+          (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+X, Command+X
+          (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: home, end, left, right
+          (e.keyCode >= 35 && e.keyCode <= 39)) {
+        return;  // let it happen, don't do anything
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+      }
+    });
+  }
+  
+  if (expiry) {
+    // Format expiry date (MM/YY)
+    expiry.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+      }
+      
+      e.target.value = value;
+    });
+    
+    // Prevent non-numeric input for expiry
+    expiry.addEventListener('keypress', (e) => {
+      // Allow: backspace, delete, tab, escape, enter
+      if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+          // Allow: Ctrl+A, Command+A
+          (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+C, Command+C
+          (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+V, Command+V
+          (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+X, Command+X
+          (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: home, end, left, right
+          (e.keyCode >= 35 && e.keyCode <= 39)) {
+        return;  // let it happen, don't do anything
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+      }
+    });
+  }
+  
+  if (cvv) {
+    // CVV - only digits
+    cvv.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
+    
+    // Prevent non-numeric input for CVV
+    cvv.addEventListener('keypress', (e) => {
+      // Allow: backspace, delete, tab, escape, enter
+      if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+          // Allow: Ctrl+A, Command+A
+          (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+C, Command+C
+          (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+V, Command+V
+          (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+X, Command+X
+          (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: home, end, left, right
+          (e.keyCode >= 35 && e.keyCode <= 39)) {
+        return;  // let it happen, don't do anything
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+      }
+    });
+  }
+}
+
+/* ==========================================
+   Pincode Validation (numeric only)
+   ========================================== */
+function initPincodeValidation() {
+  const pincode = document.getElementById('pincode');
+  
+  if (pincode) {
+    pincode.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
+    
+    // Prevent non-numeric input for pincode
+    pincode.addEventListener('keypress', (e) => {
+      // Allow: backspace, delete, tab, escape, enter
+      if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+          // Allow: Ctrl+A, Command+A
+          (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+C, Command+C
+          (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+V, Command+V
+          (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: Ctrl+X, Command+X
+          (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+          // Allow: home, end, left, right
+          (e.keyCode >= 35 && e.keyCode <= 39)) {
+        return;  // let it happen, don't do anything
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+      }
+    });
+  }
+}
+</script>
+
+
+
+
+{% endblock content %}
+

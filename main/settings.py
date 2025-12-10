@@ -28,17 +28,18 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "fantastically-isotopic-dorsey.ngrok-free.dev",  # new tunnel
-    ".ngrok-free.dev",  # wildcard to avoid breakage on next tunnel rotation
+    "fantastically-isotopic-dorsey.ngrok-free.dev",
+    ".ngrok-free.dev",
+    ".up.railway.app",  
 ]
-
-
 
 CSRF_TRUSTED_ORIGINS = [
     "https://59e27c579cf7.ngrok-free.app",
     "https://*.ngrok-free.app",
-    "https://fantastically-isotopic-dorsey.ngrok-free.dev"
+    "https://fantastically-isotopic-dorsey.ngrok-free.dev",
+    "https://*.up.railway.app",  
 ]
+
 
 
 
